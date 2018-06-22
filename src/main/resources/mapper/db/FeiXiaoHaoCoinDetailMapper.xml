@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crawler.dao.mapper.db.FeiXiaoHaoCoinDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.crawler.dao.model.db.FeiXiaoHaoCoinDetail" >
+    <id column="coin_detail_id" property="coinDetailId" jdbcType="BIGINT" />
+    <result column="feixiaohaocoin_id" property="feixiaohaocoinId" jdbcType="INTEGER" />
+    <result column="eng_abbr" property="engAbbr" jdbcType="VARCHAR" />
+    <result column="cn" property="cn" jdbcType="VARCHAR" />
+    <result column="eng_full" property="engFull" jdbcType="VARCHAR" />
+    <result column="img" property="img" jdbcType="VARCHAR" />
+    <result column="white_pager" property="whitePager" jdbcType="VARCHAR" />
+    <result column="website" property="website" jdbcType="VARCHAR" />
+    <result column="turn_volume" property="turnVolume" jdbcType="VARCHAR" />
+    <result column="total_circulation" property="totalCirculation" jdbcType="VARCHAR" />
+    <result column="pub_time" property="pubTime" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    coin_detail_id, feixiaohaocoin_id, eng_abbr, cn, eng_full, img, white_pager, website, 
+    turn_volume, total_circulation, pub_time, create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.crawler.dao.model.db.FeiXiaoHaoCoinDetailExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from feixiaohao_coin_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from feixiaohao_coin_detail
+    where coin_detail_id = #{coinDetailId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from feixiaohao_coin_detail
+    where coin_detail_id = #{coinDetailId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.crawler.dao.model.db.FeiXiaoHaoCoinDetailExample" >
+    delete from feixiaohao_coin_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.crawler.dao.model.db.FeiXiaoHaoCoinDetail" >
+    insert into feixiaohao_coin_detail (coin_detail_id, feixiaohaocoin_id, eng_abbr, 
+      cn, eng_full, img, white_pager, 
+      website, turn_volume, total_circulation, 
+      pub_time, create_time)
+    values (#{coinDetailId,jdbcType=BIGINT}, #{feixiaohaocoinId,jdbcType=INTEGER}, #{engAbbr,jdbcType=VARCHAR}, 
+      #{cn,jdbcType=VARCHAR}, #{engFull,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, #{whitePager,jdbcType=VARCHAR}, 
+      #{website,jdbcType=VARCHAR}, #{turnVolume,jdbcType=VARCHAR}, #{totalCirculation,jdbcType=VARCHAR}, 
+      #{pubTime,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crawler.dao.model.db.FeiXiaoHaoCoinDetail" >
+    insert into feixiaohao_coin_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="coinDetailId != null" >
+        coin_detail_id,
+      </if>
+      <if test="feixiaohaocoinId != null" >
+        feixiaohaocoin_id,
+      </if>
+      <if test="engAbbr != null" >
+        eng_abbr,
+      </if>
+      <if test="cn != null" >
+        cn,
+      </if>
+      <if test="engFull != null" >
+        eng_full,
+      </if>
+      <if test="img != null" >
+        img,
+      </if>
+      <if test="whitePager != null" >
+        white_pager,
+      </if>
+      <if test="website != null" >
+        website,
+      </if>
+      <if test="turnVolume != null" >
+        turn_volume,
+      </if>
+      <if test="totalCirculation != null" >
+        total_circulation,
+      </if>
+      <if test="pubTime != null" >
+        pub_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="coinDetailId != null" >
+        #{coinDetailId,jdbcType=BIGINT},
+      </if>
+      <if test="feixiaohaocoinId != null" >
+        #{feixiaohaocoinId,jdbcType=INTEGER},
+      </if>
+      <if test="engAbbr != null" >
+        #{engAbbr,jdbcType=VARCHAR},
+      </if>
+      <if test="cn != null" >
+        #{cn,jdbcType=VARCHAR},
+      </if>
+      <if test="engFull != null" >
+        #{engFull,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="whitePager != null" >
+        #{whitePager,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null" >
+        #{website,jdbcType=VARCHAR},
+      </if>
+      <if test="turnVolume != null" >
+        #{turnVolume,jdbcType=VARCHAR},
+      </if>
+      <if test="totalCirculation != null" >
+        #{totalCirculation,jdbcType=VARCHAR},
+      </if>
+      <if test="pubTime != null" >
+        #{pubTime,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.crawler.dao.model.db.FeiXiaoHaoCoinDetailExample" resultType="java.lang.Integer" >
+    select count(*) from feixiaohao_coin_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update feixiaohao_coin_detail
+    <set >
+      <if test="record.coinDetailId != null" >
+        coin_detail_id = #{record.coinDetailId,jdbcType=BIGINT},
+      </if>
+      <if test="record.feixiaohaocoinId != null" >
+        feixiaohaocoin_id = #{record.feixiaohaocoinId,jdbcType=INTEGER},
+      </if>
+      <if test="record.engAbbr != null" >
+        eng_abbr = #{record.engAbbr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cn != null" >
+        cn = #{record.cn,jdbcType=VARCHAR},
+      </if>
+      <if test="record.engFull != null" >
+        eng_full = #{record.engFull,jdbcType=VARCHAR},
+      </if>
+      <if test="record.img != null" >
+        img = #{record.img,jdbcType=VARCHAR},
+      </if>
+      <if test="record.whitePager != null" >
+        white_pager = #{record.whitePager,jdbcType=VARCHAR},
+      </if>
+      <if test="record.website != null" >
+        website = #{record.website,jdbcType=VARCHAR},
+      </if>
+      <if test="record.turnVolume != null" >
+        turn_volume = #{record.turnVolume,jdbcType=VARCHAR},
+      </if>
+      <if test="record.totalCirculation != null" >
+        total_circulation = #{record.totalCirculation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pubTime != null" >
+        pub_time = #{record.pubTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update feixiaohao_coin_detail
+    set coin_detail_id = #{record.coinDetailId,jdbcType=BIGINT},
+      feixiaohaocoin_id = #{record.feixiaohaocoinId,jdbcType=INTEGER},
+      eng_abbr = #{record.engAbbr,jdbcType=VARCHAR},
+      cn = #{record.cn,jdbcType=VARCHAR},
+      eng_full = #{record.engFull,jdbcType=VARCHAR},
+      img = #{record.img,jdbcType=VARCHAR},
+      white_pager = #{record.whitePager,jdbcType=VARCHAR},
+      website = #{record.website,jdbcType=VARCHAR},
+      turn_volume = #{record.turnVolume,jdbcType=VARCHAR},
+      total_circulation = #{record.totalCirculation,jdbcType=VARCHAR},
+      pub_time = #{record.pubTime,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crawler.dao.model.db.FeiXiaoHaoCoinDetail" >
+    update feixiaohao_coin_detail
+    <set >
+      <if test="feixiaohaocoinId != null" >
+        feixiaohaocoin_id = #{feixiaohaocoinId,jdbcType=INTEGER},
+      </if>
+      <if test="engAbbr != null" >
+        eng_abbr = #{engAbbr,jdbcType=VARCHAR},
+      </if>
+      <if test="cn != null" >
+        cn = #{cn,jdbcType=VARCHAR},
+      </if>
+      <if test="engFull != null" >
+        eng_full = #{engFull,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null" >
+        img = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="whitePager != null" >
+        white_pager = #{whitePager,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null" >
+        website = #{website,jdbcType=VARCHAR},
+      </if>
+      <if test="turnVolume != null" >
+        turn_volume = #{turnVolume,jdbcType=VARCHAR},
+      </if>
+      <if test="totalCirculation != null" >
+        total_circulation = #{totalCirculation,jdbcType=VARCHAR},
+      </if>
+      <if test="pubTime != null" >
+        pub_time = #{pubTime,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where coin_detail_id = #{coinDetailId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crawler.dao.model.db.FeiXiaoHaoCoinDetail" >
+    update feixiaohao_coin_detail
+    set feixiaohaocoin_id = #{feixiaohaocoinId,jdbcType=INTEGER},
+      eng_abbr = #{engAbbr,jdbcType=VARCHAR},
+      cn = #{cn,jdbcType=VARCHAR},
+      eng_full = #{engFull,jdbcType=VARCHAR},
+      img = #{img,jdbcType=VARCHAR},
+      white_pager = #{whitePager,jdbcType=VARCHAR},
+      website = #{website,jdbcType=VARCHAR},
+      turn_volume = #{turnVolume,jdbcType=VARCHAR},
+      total_circulation = #{totalCirculation,jdbcType=VARCHAR},
+      pub_time = #{pubTime,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where coin_detail_id = #{coinDetailId,jdbcType=BIGINT}
+  </update>
+</mapper>
