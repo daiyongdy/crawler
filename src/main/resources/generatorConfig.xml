@@ -22,7 +22,9 @@
         <!--<table tableName="coin" domainObjectName="Coin"></table>-->
         <!--<table tableName="feixiaohao_coin" domainObjectName="FeiXiaoHaoCoin"></table>-->
         <!--<table tableName="feixiaohao_coin_detail" domainObjectName="FeiXiaoHaoCoinDetail"></table>-->
-        <table tableName="better_coin" domainObjectName="BetterCoin"></table>
-        <table tableName="better_article" domainObjectName="BetterArticle"></table>
+      <!--  <table tableName="better_coin" domainObjectName="BetterCoin"></table>
+        <table tableName="better_article" domainObjectName="BetterArticle"></table>-->
+        <!--<table tableName="bishijie_keyword" domainObjectName="BishijieKeyword"></table>-->
+        <table tableName="bishijie_article" domainObjectName="BishijieArticle"></table>
     </context>
 </generatorConfiguration>
