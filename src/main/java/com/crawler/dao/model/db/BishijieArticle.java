@@ -5,6 +5,8 @@ import java.util.Date;
 public class BishijieArticle {
     private Long articleId;
 
+    private Long betterCoinId;
+
     private String sourceId;
 
     private String coinName;
@@ -15,6 +17,8 @@ public class BishijieArticle {
 
     private Date pubTime;
 
+    private String source;
+
     private Date createTime;
 
     public Long getArticleId() {
@@ -23,6 +27,14 @@ public class BishijieArticle {
 
     public void setArticleId(Long articleId) {
         this.articleId = articleId;
+    }
+
+    public Long getBetterCoinId() {
+        return betterCoinId;
+    }
+
+    public void setBetterCoinId(Long betterCoinId) {
+        this.betterCoinId = betterCoinId;
     }
 
     public String getSourceId() {
@@ -63,6 +75,14 @@ public class BishijieArticle {
 
     public void setPubTime(Date pubTime) {
         this.pubTime = pubTime;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source == null ? null : source.trim();
     }
 
     public Date getCreateTime() {

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.crawler.Constants;
+import com.crawler.dao.model.db.BetterCoin;
 import com.crawler.dao.model.db.BishijieArticle;
 import com.crawler.dao.model.db.BishijieKeyword;
 import com.crawler.service.BishijieArticleService;
@@ -11,6 +12,7 @@ import com.crawler.service.BishijieService;
 import com.crawler.util.SpringContextUtil;
 import com.crawler.util.httpclient.CoohuaHttpClient;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -92,8 +94,16 @@ public class BishijieRunnable implements Runnable {
 				article.setTitle(bishijieObjecct.getTitle());
 				article.setCreateTime(new Date());
 				article.setPubTime(new Date(bishijieObjecct.getTimestamp() * 1000));
-				article.setCoinName(getCoinName(bishijieObjecct.getTitle()));
+				BetterCoin betterCoin = getRelationBetterCoin(article.getTitle());
+				if (betterCoin != null) {
+					article.setBetterCoinId(betterCoin.getId());
+					article.setCoinName(betterCoin.getName());
+				} else {
+					article.setBetterCoinId(null);
+					article.setCoinName(null);
+				}
 				article.setSourceId(bishijieObjecct.getSourceId());
+				article.setSource("币世界");
 				try {
 					BISHIJIE_ARTICLE_SERVICE.add(article);
 				} catch (Exception e) {
@@ -106,6 +116,20 @@ public class BishijieRunnable implements Runnable {
 		}
 
 		return time;
+	}
+
+	public BetterCoin getRelationBetterCoin(String title) {
+		for (BetterCoin betterCoin : Constants.BETTER_COINS) {
+			if (title.toUpperCase().contains(betterCoin.getName().toUpperCase())) {
+				return betterCoin;
+			}
+			if (StringUtils.isNotBlank(betterCoin.getCnName())) {
+				if (title.toUpperCase().contains(betterCoin.getCnName())) {
+					return betterCoin;
+				}
+			}
+		}
+		return null;
 	}
 
 	private String getCoinName(String title) {

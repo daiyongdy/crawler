@@ -1,8 +1,8 @@
 package com.crawler;
 
-import com.crawler.dao.model.db.BishijieKeyword;
+import com.crawler.dao.model.db.BetterCoin;
 import com.crawler.runnable.BishijieRunnable;
-import com.crawler.service.BishijieService;
+import com.crawler.service.BetterCoinService;
 import com.crawler.util.SpringContextUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,11 +25,11 @@ public class Bootstrap {
 	public static void main(String[] args) {
 		SpringApplication.run(Bootstrap.class, args);
 
-		BishijieService bishijieService = SpringContextUtil.getBean("bishijieService");
+		BetterCoinService betterCoinService = SpringContextUtil.getBean("betterCoinService");
 
-		List<BishijieKeyword> all = bishijieService.getAll();
-		for (BishijieKeyword keyword : all) {
-			Constants.KEYWORDS.add(keyword.getKeyword());
+		List<BetterCoin> betterCoins = betterCoinService.getAllCoin();
+		for (BetterCoin betterCoin : betterCoins) {
+			Constants.BETTER_COINS.add(betterCoin);
 		}
 
 		new Thread(new BishijieRunnable()).start();

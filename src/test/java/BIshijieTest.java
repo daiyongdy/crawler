@@ -3,13 +3,16 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.crawler.Bootstrap;
 import com.crawler.Constants;
+import com.crawler.dao.model.db.BetterCoin;
 import com.crawler.dao.model.db.BishijieArticle;
 import com.crawler.dao.model.db.BishijieKeyword;
 import com.crawler.dao.model.db.Coin;
+import com.crawler.service.BetterCoinService;
 import com.crawler.service.BishijieArticleService;
 import com.crawler.service.BishijieService;
 import com.crawler.service.CoinService;
 import com.crawler.util.httpclient.CoohuaHttpClient;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,12 +45,56 @@ public class BIshijieTest {
 	@Autowired
 	private BishijieArticleService bishijieArticleService;
 
+	@Autowired
+	private BetterCoinService betterCoinService;
+
+//	@Before
+//	public void before() {
+//		List<BishijieKeyword> all = bishijieService.getAll();
+//		for (BishijieKeyword keyword : all) {
+//			Constants.KEYWORDS.add(keyword.getKeyword());
+//		}
+//	}
 	@Before
 	public void before() {
-		List<BishijieKeyword> all = bishijieService.getAll();
-		for (BishijieKeyword keyword : all) {
-			Constants.KEYWORDS.add(keyword.getKeyword());
+		List<BetterCoin> betterCoins = betterCoinService.getAllCoin();
+		for (BetterCoin betterCoin : betterCoins) {
+			Constants.BETTER_COINS.add(betterCoin);
 		}
+	}
+
+	@Test
+	public void updateBetterCoinIdTest(){
+		List<BishijieArticle> bishijieArticles = bishijieArticleService.getAll();
+
+		for (BishijieArticle article : bishijieArticles) {
+			BetterCoin betterCoin = getRelationBetterCoin(article.getTitle());
+			if (betterCoin != null) {
+				article.setBetterCoinId(betterCoin.getId());
+				article.setCoinName(betterCoin.getName());
+			} else {
+				article.setBetterCoinId(null);
+				article.setCoinName(null);
+			}
+
+			System.out.println(article.getTitle());
+
+			bishijieArticleService.update(article);
+		}
+	}
+
+	public BetterCoin getRelationBetterCoin(String title) {
+		for (BetterCoin betterCoin : Constants.BETTER_COINS) {
+			if (title.toUpperCase().contains(betterCoin.getName())) {
+				return betterCoin;
+			}
+			if (StringUtils.isNotBlank(betterCoin.getCnName())) {
+				if (title.toUpperCase().contains(betterCoin.getCnName())) {
+					return betterCoin;
+				}
+			}
+		}
+		return null;
 	}
 
 	@Test

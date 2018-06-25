@@ -165,6 +165,66 @@ public class BishijieArticleExample {
             return (Criteria) this;
         }
 
+        public Criteria andBetterCoinIdIsNull() {
+            addCriterion("better_coin_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBetterCoinIdIsNotNull() {
+            addCriterion("better_coin_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBetterCoinIdEqualTo(Long value) {
+            addCriterion("better_coin_id =", value, "betterCoinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBetterCoinIdNotEqualTo(Long value) {
+            addCriterion("better_coin_id <>", value, "betterCoinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBetterCoinIdGreaterThan(Long value) {
+            addCriterion("better_coin_id >", value, "betterCoinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBetterCoinIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("better_coin_id >=", value, "betterCoinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBetterCoinIdLessThan(Long value) {
+            addCriterion("better_coin_id <", value, "betterCoinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBetterCoinIdLessThanOrEqualTo(Long value) {
+            addCriterion("better_coin_id <=", value, "betterCoinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBetterCoinIdIn(List<Long> values) {
+            addCriterion("better_coin_id in", values, "betterCoinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBetterCoinIdNotIn(List<Long> values) {
+            addCriterion("better_coin_id not in", values, "betterCoinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBetterCoinIdBetween(Long value1, Long value2) {
+            addCriterion("better_coin_id between", value1, value2, "betterCoinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBetterCoinIdNotBetween(Long value1, Long value2) {
+            addCriterion("better_coin_id not between", value1, value2, "betterCoinId");
+            return (Criteria) this;
+        }
+
         public Criteria andSourceIdIsNull() {
             addCriterion("source_id is null");
             return (Criteria) this;
@@ -502,6 +562,76 @@ public class BishijieArticleExample {
 
         public Criteria andPubTimeNotBetween(Date value1, Date value2) {
             addCriterion("pub_time not between", value1, value2, "pubTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceIsNull() {
+            addCriterion("source is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceIsNotNull() {
+            addCriterion("source is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceEqualTo(String value) {
+            addCriterion("source =", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceNotEqualTo(String value) {
+            addCriterion("source <>", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceGreaterThan(String value) {
+            addCriterion("source >", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceGreaterThanOrEqualTo(String value) {
+            addCriterion("source >=", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceLessThan(String value) {
+            addCriterion("source <", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceLessThanOrEqualTo(String value) {
+            addCriterion("source <=", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceLike(String value) {
+            addCriterion("source like", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceNotLike(String value) {
+            addCriterion("source not like", value, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceIn(List<String> values) {
+            addCriterion("source in", values, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceNotIn(List<String> values) {
+            addCriterion("source not in", values, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceBetween(String value1, String value2) {
+            addCriterion("source between", value1, value2, "source");
+            return (Criteria) this;
+        }
+
+        public Criteria andSourceNotBetween(String value1, String value2) {
+            addCriterion("source not between", value1, value2, "source");
             return (Criteria) this;
         }
 

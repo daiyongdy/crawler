@@ -41,4 +41,18 @@ public class BishijieArticleService {
 		BishijieArticle article = bishijieArticleBizMapper.getMaxPubTime();
 		return article.getPubTime();
 	}
+
+	public List<BishijieArticle> getRelation() {
+		BishijieArticleExample bishijieArticleExample = new BishijieArticleExample();
+		bishijieArticleExample.createCriteria().andCoinNameIsNotNull();
+		return bishijieArticleMapper.selectByExample(bishijieArticleExample);
+	}
+
+	public void update(BishijieArticle article) {
+		bishijieArticleMapper.updateByPrimaryKeySelective(article);
+	}
+
+	public List<BishijieArticle> getAll() {
+		return bishijieArticleMapper.selectByExample(new BishijieArticleExample());
+	}
 }
