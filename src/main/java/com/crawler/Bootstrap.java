@@ -1,8 +1,8 @@
 package com.crawler;
 
-import com.crawler.dao.model.db.BetterCoin;
+import com.crawler.dao.model.db.CrawlerApiCoin;
 import com.crawler.runnable.BishijieRunnable;
-import com.crawler.service.BetterCoinService;
+import com.crawler.service.CrawlerApiCoinService;
 import com.crawler.util.SpringContextUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,11 +25,17 @@ public class Bootstrap {
 	public static void main(String[] args) {
 		SpringApplication.run(Bootstrap.class, args);
 
-		BetterCoinService betterCoinService = SpringContextUtil.getBean("betterCoinService");
+//		BetterCoinService betterCoinService = SpringContextUtil.getBean("betterCoinService");
+//
+//		List<BetterCoin> betterCoins = betterCoinService.getAllCoin();
+//		for (BetterCoin betterCoin : betterCoins) {
+//			Constants.BETTER_COINS.add(betterCoin);
+//		}
 
-		List<BetterCoin> betterCoins = betterCoinService.getAllCoin();
-		for (BetterCoin betterCoin : betterCoins) {
-			Constants.BETTER_COINS.add(betterCoin);
+		CrawlerApiCoinService crawlerApiCoinService = SpringContextUtil.getBean("crawlerApiCoinService");
+		List<CrawlerApiCoin> allApiCoin = crawlerApiCoinService.getAllApiCoin();
+		for (CrawlerApiCoin coin : allApiCoin) {
+			Constants.API_COINS.add(coin);
 		}
 
 		new Thread(new BishijieRunnable()).start();

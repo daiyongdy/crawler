@@ -5,9 +5,9 @@ import java.util.Date;
 public class BishijieArticle {
     private Long articleId;
 
-    private Long betterCoinId;
-
     private String sourceId;
+
+    private Long coinId;
 
     private String coinName;
 
@@ -29,20 +29,20 @@ public class BishijieArticle {
         this.articleId = articleId;
     }
 
-    public Long getBetterCoinId() {
-        return betterCoinId;
-    }
-
-    public void setBetterCoinId(Long betterCoinId) {
-        this.betterCoinId = betterCoinId;
-    }
-
     public String getSourceId() {
         return sourceId;
     }
 
     public void setSourceId(String sourceId) {
         this.sourceId = sourceId == null ? null : sourceId.trim();
+    }
+
+    public Long getCoinId() {
+        return coinId;
+    }
+
+    public void setCoinId(Long coinId) {
+        this.coinId = coinId;
     }
 
     public String getCoinName() {

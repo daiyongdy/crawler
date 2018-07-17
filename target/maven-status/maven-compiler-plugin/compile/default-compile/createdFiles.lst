@@ -6,6 +6,7 @@ com/crawler/dao/model/db/FeiXiaoHaoCoinDetailExample.class
 com/crawler/dao/mapper/biz/BishijieArticleBizMapper.class
 com/crawler/runnable/KeyWordRunnable.class
 com/crawler/dao/model/db/BetterArticleExample.class
+com/crawler/dao/model/db/CrawlerApiCoinExample$Criterion.class
 com/crawler/web/twitter/TwitterService.class
 com/crawler/service/CoinService.class
 com/crawler/util/httpclient/common/HttpHeader$Headers.class
@@ -32,6 +33,7 @@ com/crawler/util/httpclient/common/util/OldOCR.class
 com/crawler/dao/model/db/ZombieUser.class
 com/crawler/util/httpclient/common/SSLs$1.class
 com/crawler/dao/model/db/BishijieKeywordExample$Criteria.class
+com/crawler/dao/model/db/CrawlerApiCoin.class
 com/crawler/util/UUIDGenerator.class
 com/crawler/listener/StartUpListener.class
 com/crawler/dao/model/db/BishijieArticle.class
@@ -97,6 +99,7 @@ com/crawler/web/weibo/WeiboService.class
 com/crawler/dao/model/db/BishijieKeywordExample.class
 com/crawler/util/httpclient/HttpClientUtil.class
 com/crawler/dao/model/db/Article.class
+com/crawler/dao/mapper/db/CrawlerApiCoinMapper.class
 com/crawler/service/BetterCrawlerService.class
 com/crawler/queue/WechatQueue.class
 com/crawler/util/httpclient/common/HttpConfig.class
@@ -104,15 +107,20 @@ com/crawler/service/FeiXiaoHaoService.class
 com/crawler/runnable/BetterCrawlerRunnable.class
 com/crawler/util/httpclient/common/SSLs.class
 com/crawler/runnable/BishijieObjecct.class
+com/crawler/dao/model/db/CrawlerApiCoinExample$GeneratedCriteria.class
 com/crawler/service/FeiXiaoHaoCoinDetailService.class
 com/crawler/dao/mapper/db/FeiXiaoHaoCoinMapper.class
 com/crawler/dao/model/db/BishijieArticleExample$GeneratedCriteria.class
 com/crawler/dao/model/db/BetterArticleExample$Criterion.class
+com/crawler/runnable/ApiCoinUpdateRunnable.class
+com/crawler/service/CrawlerApiCoinService.class
 com/crawler/runnable/CrawlerRunnable$WeiboConsumer$1.class
 com/crawler/util/SpringContextUtil.class
 com/crawler/dao/model/db/FeiXiaoHaoCoinExample$GeneratedCriteria.class
 com/crawler/util/httpclient/common/Utils.class
+com/crawler/dao/model/db/CrawlerApiCoinExample.class
 com/crawler/dao/model/db/ZombieUserExample$GeneratedCriteria.class
 com/crawler/queue/Queue.class
 com/crawler/util/httpclient/exception/HttpProcessException.class
 com/crawler/service/ArticleService.class
+com/crawler/dao/model/db/CrawlerApiCoinExample$Criteria.class

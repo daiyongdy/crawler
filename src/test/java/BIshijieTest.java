@@ -3,14 +3,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.crawler.Bootstrap;
 import com.crawler.Constants;
-import com.crawler.dao.model.db.BetterCoin;
-import com.crawler.dao.model.db.BishijieArticle;
-import com.crawler.dao.model.db.BishijieKeyword;
-import com.crawler.dao.model.db.Coin;
-import com.crawler.service.BetterCoinService;
-import com.crawler.service.BishijieArticleService;
-import com.crawler.service.BishijieService;
-import com.crawler.service.CoinService;
+import com.crawler.dao.model.db.*;
+import com.crawler.service.*;
 import com.crawler.util.httpclient.CoohuaHttpClient;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
@@ -48,6 +42,9 @@ public class BIshijieTest {
 	@Autowired
 	private BetterCoinService betterCoinService;
 
+	@Autowired
+	private CrawlerApiCoinService crawlerApiCoinService;
+
 //	@Before
 //	public void before() {
 //		List<BishijieKeyword> all = bishijieService.getAll();
@@ -57,30 +54,54 @@ public class BIshijieTest {
 //	}
 	@Before
 	public void before() {
-		List<BetterCoin> betterCoins = betterCoinService.getAllCoin();
-		for (BetterCoin betterCoin : betterCoins) {
-			Constants.BETTER_COINS.add(betterCoin);
+//		List<BetterCoin> betterCoins = betterCoinService.getAllCoin();
+//		for (BetterCoin betterCoin : betterCoins) {
+//			Constants.BETTER_COINS.add(betterCoin);
+//		}
+
+		List<CrawlerApiCoin> allApiCoin = crawlerApiCoinService.getAllApiCoin();
+		for (CrawlerApiCoin coin : allApiCoin) {
+			Constants.API_COINS.add(coin);
 		}
+
 	}
 
 	@Test
 	public void updateBetterCoinIdTest(){
 		List<BishijieArticle> bishijieArticles = bishijieArticleService.getAll();
 
+		int index = 1;
 		for (BishijieArticle article : bishijieArticles) {
-			BetterCoin betterCoin = getRelationBetterCoin(article.getTitle());
-			if (betterCoin != null) {
-				article.setBetterCoinId(betterCoin.getId());
-				article.setCoinName(betterCoin.getName());
+			CrawlerApiCoin apiCoin = getApiCoin(article.getTitle());
+			if (apiCoin != null) {
+				article.setCoinId(apiCoin.getId());
+				article.setCoinName(apiCoin.getName());
 			} else {
-				article.setBetterCoinId(null);
+				article.setCoinId(null);
 				article.setCoinName(null);
 			}
 
-			System.out.println(article.getTitle());
+			System.out.println("数量：" + (index++) + "   " + article.getTitle());
 
 			bishijieArticleService.update(article);
 		}
+	}
+
+	public CrawlerApiCoin getApiCoin(String title) {
+		for (CrawlerApiCoin apiCoin : Constants.API_COINS) {
+
+			if (StringUtils.isNotBlank(apiCoin.getCnName())) {
+				if (title.toUpperCase().contains(apiCoin.getCnName())) {
+					return apiCoin;
+				}
+			}
+
+			if (title.toUpperCase().contains(apiCoin.getName())) {
+				return apiCoin;
+			}
+
+		}
+		return null;
 	}
 
 	public BetterCoin getRelationBetterCoin(String title) {

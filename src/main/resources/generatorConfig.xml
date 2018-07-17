@@ -26,5 +26,6 @@
         <table tableName="better_article" domainObjectName="BetterArticle"></table>-->
         <!--<table tableName="bishijie_keyword" domainObjectName="BishijieKeyword"></table>-->
         <table tableName="bishijie_article" domainObjectName="BishijieArticle"></table>
+        <!--<table tableName="crawler_api_coin" domainObjectName="CrawlerApiCoin"></table>-->
     </context>
 </generatorConfiguration>

@@ -165,66 +165,6 @@ public class BishijieArticleExample {
             return (Criteria) this;
         }
 
-        public Criteria andBetterCoinIdIsNull() {
-            addCriterion("better_coin_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBetterCoinIdIsNotNull() {
-            addCriterion("better_coin_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBetterCoinIdEqualTo(Long value) {
-            addCriterion("better_coin_id =", value, "betterCoinId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBetterCoinIdNotEqualTo(Long value) {
-            addCriterion("better_coin_id <>", value, "betterCoinId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBetterCoinIdGreaterThan(Long value) {
-            addCriterion("better_coin_id >", value, "betterCoinId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBetterCoinIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("better_coin_id >=", value, "betterCoinId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBetterCoinIdLessThan(Long value) {
-            addCriterion("better_coin_id <", value, "betterCoinId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBetterCoinIdLessThanOrEqualTo(Long value) {
-            addCriterion("better_coin_id <=", value, "betterCoinId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBetterCoinIdIn(List<Long> values) {
-            addCriterion("better_coin_id in", values, "betterCoinId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBetterCoinIdNotIn(List<Long> values) {
-            addCriterion("better_coin_id not in", values, "betterCoinId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBetterCoinIdBetween(Long value1, Long value2) {
-            addCriterion("better_coin_id between", value1, value2, "betterCoinId");
-            return (Criteria) this;
-        }
-
-        public Criteria andBetterCoinIdNotBetween(Long value1, Long value2) {
-            addCriterion("better_coin_id not between", value1, value2, "betterCoinId");
-            return (Criteria) this;
-        }
-
         public Criteria andSourceIdIsNull() {
             addCriterion("source_id is null");
             return (Criteria) this;
@@ -292,6 +232,66 @@ public class BishijieArticleExample {
 
         public Criteria andSourceIdNotBetween(String value1, String value2) {
             addCriterion("source_id not between", value1, value2, "sourceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoinIdIsNull() {
+            addCriterion("coin_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoinIdIsNotNull() {
+            addCriterion("coin_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoinIdEqualTo(Long value) {
+            addCriterion("coin_id =", value, "coinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoinIdNotEqualTo(Long value) {
+            addCriterion("coin_id <>", value, "coinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoinIdGreaterThan(Long value) {
+            addCriterion("coin_id >", value, "coinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoinIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("coin_id >=", value, "coinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoinIdLessThan(Long value) {
+            addCriterion("coin_id <", value, "coinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoinIdLessThanOrEqualTo(Long value) {
+            addCriterion("coin_id <=", value, "coinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoinIdIn(List<Long> values) {
+            addCriterion("coin_id in", values, "coinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoinIdNotIn(List<Long> values) {
+            addCriterion("coin_id not in", values, "coinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoinIdBetween(Long value1, Long value2) {
+            addCriterion("coin_id between", value1, value2, "coinId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCoinIdNotBetween(Long value1, Long value2) {
+            addCriterion("coin_id not between", value1, value2, "coinId");
             return (Criteria) this;
         }
 

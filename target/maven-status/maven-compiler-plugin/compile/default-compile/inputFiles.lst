@@ -19,7 +19,9 @@
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/mapper/biz/BishijieArticleBizMapper.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/BetterCoin.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/BishijieArticleExample.java
+/Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/CrawlerApiCoinExample.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/service/FeiXiaoHaoCoinDetailService.java
+/Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/CrawlerApiCoin.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/queue/WechatQueue.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/mapper/biz/ZombieUserBizMapper.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/BetterArticleExample.java
@@ -28,6 +30,7 @@
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/web/weibo/WeiboService.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/httpclient/common/util/OCR.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/service/BetterCrawlerService.java
+/Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/mapper/db/CrawlerApiCoinMapper.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/BishijieKeyword.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/pool/IPPool.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/FeiXiaoHaoCoinDetailExample.java
@@ -65,6 +68,7 @@
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/httpclient/builder/HCB.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/web/twitter/TwitterService.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/Bootstrap.java
+/Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/service/CrawlerApiCoinService.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/FeiXiaoHaoCoinExample.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/Md5Utils.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/mapper/db/BishijieKeywordMapper.java

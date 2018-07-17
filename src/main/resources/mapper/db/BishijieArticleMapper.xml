@@ -3,8 +3,8 @@
 <mapper namespace="com.crawler.dao.mapper.db.BishijieArticleMapper" >
   <resultMap id="BaseResultMap" type="com.crawler.dao.model.db.BishijieArticle" >
     <id column="article_id" property="articleId" jdbcType="BIGINT" />
-    <result column="better_coin_id" property="betterCoinId" jdbcType="BIGINT" />
     <result column="source_id" property="sourceId" jdbcType="VARCHAR" />
+    <result column="coin_id" property="coinId" jdbcType="BIGINT" />
     <result column="coin_name" property="coinName" jdbcType="VARCHAR" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
@@ -71,8 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    article_id, better_coin_id, source_id, coin_name, title, content, pub_time, source, 
-    create_time
+    article_id, source_id, coin_id, coin_name, title, content, pub_time, source, create_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.crawler.dao.model.db.BishijieArticleExample" >
     select
@@ -105,11 +104,11 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.crawler.dao.model.db.BishijieArticle" >
-    insert into bishijie_article (article_id, better_coin_id, source_id, 
+    insert into bishijie_article (article_id, source_id, coin_id, 
       coin_name, title, content, 
       pub_time, source, create_time
       )
-    values (#{articleId,jdbcType=BIGINT}, #{betterCoinId,jdbcType=BIGINT}, #{sourceId,jdbcType=VARCHAR}, 
+    values (#{articleId,jdbcType=BIGINT}, #{sourceId,jdbcType=VARCHAR}, #{coinId,jdbcType=BIGINT}, 
       #{coinName,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{pubTime,jdbcType=TIMESTAMP}, #{source,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
       )
@@ -120,11 +119,11 @@
       <if test="articleId != null" >
         article_id,
       </if>
-      <if test="betterCoinId != null" >
-        better_coin_id,
-      </if>
       <if test="sourceId != null" >
         source_id,
+      </if>
+      <if test="coinId != null" >
+        coin_id,
       </if>
       <if test="coinName != null" >
         coin_name,
@@ -149,11 +148,11 @@
       <if test="articleId != null" >
         #{articleId,jdbcType=BIGINT},
       </if>
-      <if test="betterCoinId != null" >
-        #{betterCoinId,jdbcType=BIGINT},
-      </if>
       <if test="sourceId != null" >
         #{sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="coinId != null" >
+        #{coinId,jdbcType=BIGINT},
       </if>
       <if test="coinName != null" >
         #{coinName,jdbcType=VARCHAR},
@@ -187,11 +186,11 @@
       <if test="record.articleId != null" >
         article_id = #{record.articleId,jdbcType=BIGINT},
       </if>
-      <if test="record.betterCoinId != null" >
-        better_coin_id = #{record.betterCoinId,jdbcType=BIGINT},
-      </if>
       <if test="record.sourceId != null" >
         source_id = #{record.sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coinId != null" >
+        coin_id = #{record.coinId,jdbcType=BIGINT},
       </if>
       <if test="record.coinName != null" >
         coin_name = #{record.coinName,jdbcType=VARCHAR},
@@ -219,8 +218,8 @@
   <update id="updateByExample" parameterType="map" >
     update bishijie_article
     set article_id = #{record.articleId,jdbcType=BIGINT},
-      better_coin_id = #{record.betterCoinId,jdbcType=BIGINT},
       source_id = #{record.sourceId,jdbcType=VARCHAR},
+      coin_id = #{record.coinId,jdbcType=BIGINT},
       coin_name = #{record.coinName,jdbcType=VARCHAR},
       title = #{record.title,jdbcType=VARCHAR},
       content = #{record.content,jdbcType=VARCHAR},
@@ -234,11 +233,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.crawler.dao.model.db.BishijieArticle" >
     update bishijie_article
     <set >
-      <if test="betterCoinId != null" >
-        better_coin_id = #{betterCoinId,jdbcType=BIGINT},
-      </if>
       <if test="sourceId != null" >
         source_id = #{sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="coinId != null" >
+        coin_id = #{coinId,jdbcType=BIGINT},
       </if>
       <if test="coinName != null" >
         coin_name = #{coinName,jdbcType=VARCHAR},
@@ -263,8 +262,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.crawler.dao.model.db.BishijieArticle" >
     update bishijie_article
-    set better_coin_id = #{betterCoinId,jdbcType=BIGINT},
-      source_id = #{sourceId,jdbcType=VARCHAR},
+    set source_id = #{sourceId,jdbcType=VARCHAR},
+      coin_id = #{coinId,jdbcType=BIGINT},
       coin_name = #{coinName,jdbcType=VARCHAR},
       title = #{title,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},

@@ -7,8 +7,10 @@ import com.crawler.Constants;
 import com.crawler.dao.model.db.BetterCoin;
 import com.crawler.dao.model.db.BishijieArticle;
 import com.crawler.dao.model.db.BishijieKeyword;
+import com.crawler.dao.model.db.CrawlerApiCoin;
 import com.crawler.service.BishijieArticleService;
 import com.crawler.service.BishijieService;
+import com.crawler.service.CrawlerApiCoinService;
 import com.crawler.util.SpringContextUtil;
 import com.crawler.util.httpclient.CoohuaHttpClient;
 import com.google.common.collect.Lists;
@@ -37,7 +39,7 @@ public class BishijieRunnable implements Runnable {
 	@Override
 	public void run() {
 
-		new Thread(new KeyWordRunnable()).start();
+		new Thread(new ApiCoinUpdateRunnable()).start();
 
 		logger.info("[币世界] 开始抓取");
 
@@ -95,11 +97,13 @@ public class BishijieRunnable implements Runnable {
 				article.setCreateTime(new Date());
 				article.setPubTime(new Date(bishijieObjecct.getTimestamp() * 1000));
 				BetterCoin betterCoin = getRelationBetterCoin(article.getTitle());
-				if (betterCoin != null) {
-					article.setBetterCoinId(betterCoin.getId());
-					article.setCoinName(betterCoin.getName());
+
+				CrawlerApiCoin apiCoin = getApiCoin(article.getTitle());
+				if (apiCoin != null) {
+					article.setCoinId(apiCoin.getId());
+					article.setCoinName(apiCoin.getName());
 				} else {
-					article.setBetterCoinId(null);
+					article.setCoinId(null);
 					article.setCoinName(null);
 				}
 				article.setSourceId(bishijieObjecct.getSourceId());
@@ -163,6 +167,23 @@ public class BishijieRunnable implements Runnable {
 
 		return result;
 	}
+
+	public CrawlerApiCoin getApiCoin(String title) {
+		for (CrawlerApiCoin apiCoin : Constants.API_COINS) {
+
+			if (StringUtils.isNotBlank(apiCoin.getCnName())) {
+				if (title.toUpperCase().contains(apiCoin.getCnName())) {
+					return apiCoin;
+				}
+			}
+
+			if (title.toUpperCase().contains(apiCoin.getName())) {
+				return apiCoin;
+			}
+
+		}
+		return null;
+	}
 }
 
 class BishijieObjecct {
@@ -201,6 +222,48 @@ class BishijieObjecct {
 
 	public void setSourceId(String sourceId) {
 		this.sourceId = sourceId;
+	}
+}
+
+class ApiCoinUpdateRunnable implements Runnable {
+
+	private static final Logger logger = LogManager.getLogger(KeyWordRunnable.class);
+
+	private static final CrawlerApiCoinService CRAWLER_API_COIN_SERVICE = SpringContextUtil.getBean("crawlerApiCoinService");
+
+	@Override
+	public void run() {
+		try {
+			Thread.sleep(60 * 1000 * 60 * 24 * 7);  //7天更新一次
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		logger.info("[币世界] 开始刷新apiCoin");
+
+		String url = "https://api.coinmarketcap.com/v2/listings/";
+		String response = CoohuaHttpClient.get(url, "");
+		JSONObject responseObject = JSON.parseObject(response);
+		if (responseObject != null) {
+			JSONArray datas = responseObject.getJSONArray("data");
+			for (Object data : datas) {
+				JSONObject object = (JSONObject) data;
+
+				long id = object.getLongValue("id");
+				CrawlerApiCoin byId = CRAWLER_API_COIN_SERVICE.getById(id);
+				if (byId == null) {
+					CrawlerApiCoin coin = new CrawlerApiCoin();
+					coin.setId(object.getLongValue("id"));
+					coin.setCnName(null);
+					coin.setSymbol(object.getString("symbol"));
+					coin.setName(object.getString("name"));
+					CRAWLER_API_COIN_SERVICE.add(coin);
+					Constants.API_COINS.add(coin);
+				}
+
+			}
+			logger.info("[币世界] 刷新apiCoin完毕，当前apiCoin数量:{}", Constants.API_COINS.size());
+		}
 	}
 }
 
