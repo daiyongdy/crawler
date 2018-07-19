@@ -8,6 +8,7 @@ com/crawler/runnable/KeyWordRunnable.class
 com/crawler/dao/model/db/BetterArticleExample.class
 com/crawler/dao/model/db/CrawlerApiCoinExample$Criterion.class
 com/crawler/web/twitter/TwitterService.class
+com/crawler/web/ethrescan/Line.class
 com/crawler/service/CoinService.class
 com/crawler/util/httpclient/common/HttpHeader$Headers.class
 com/crawler/dao/mapper/db/BetterCoinMapper.class
@@ -126,9 +127,11 @@ com/crawler/service/CrawlerApiCoinService.class
 com/crawler/runnable/CrawlerRunnable$WeiboConsumer$1.class
 com/crawler/util/SpringContextUtil.class
 com/crawler/dao/model/db/FeiXiaoHaoCoinExample$GeneratedCriteria.class
+com/crawler/web/ethrescan/HtmlProvider.class
 com/crawler/util/httpclient/common/Utils.class
 com/crawler/dao/model/db/CrawlerApiCoinExample.class
 com/crawler/dao/model/db/ZombieUserExample$GeneratedCriteria.class
+com/crawler/web/ethrescan/ApiProvider.class
 com/crawler/queue/Queue.class
 com/crawler/util/httpclient/exception/HttpProcessException.class
 com/crawler/service/ArticleService.class

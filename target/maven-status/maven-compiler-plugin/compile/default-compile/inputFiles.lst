@@ -1,4 +1,5 @@
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/FeiXiaoHaoCoinDetail.java
+/Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/web/ethrescan/Line.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/mapper/db/EtherScanMapper.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/mapper/db/BishijieArticleMapper.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/BishijieArticle.java
@@ -26,6 +27,7 @@
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/service/FeiXiaoHaoCoinDetailService.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/CrawlerApiCoin.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/queue/WechatQueue.java
+/Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/web/ethrescan/ApiProvider.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/mapper/biz/ZombieUserBizMapper.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/BetterArticleExample.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/listener/StartUpListener.java
@@ -76,6 +78,7 @@
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/service/CrawlerApiCoinService.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/FeiXiaoHaoCoinExample.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/Md5Utils.java
+/Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/web/ethrescan/HtmlProvider.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/mapper/db/BishijieKeywordMapper.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/httpclient/HttpClientUtil.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/Constants.java
