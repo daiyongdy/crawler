@@ -25,7 +25,8 @@
       <!--  <table tableName="better_coin" domainObjectName="BetterCoin"></table>
         <table tableName="better_article" domainObjectName="BetterArticle"></table>-->
         <!--<table tableName="bishijie_keyword" domainObjectName="BishijieKeyword"></table>-->
-        <table tableName="bishijie_article" domainObjectName="BishijieArticle"></table>
+        <!--<table tableName="bishijie_article" domainObjectName="BishijieArticle"></table>-->
         <!--<table tableName="crawler_api_coin" domainObjectName="CrawlerApiCoin"></table>-->
+        <table tableName="etherscan" domainObjectName="EtherScan"></table>
     </context>
 </generatorConfiguration>

@@ -1,16 +1,10 @@
 package com.crawler;
 
-import com.crawler.dao.model.db.CrawlerApiCoin;
-import com.crawler.runnable.BishijieRunnable;
-import com.crawler.service.CrawlerApiCoinService;
-import com.crawler.util.SpringContextUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.List;
 
 @SpringBootApplication
 //@ServletComponentScan
@@ -32,14 +26,14 @@ public class Bootstrap {
 //			Constants.BETTER_COINS.add(betterCoin);
 //		}
 
-		CrawlerApiCoinService crawlerApiCoinService = SpringContextUtil.getBean("crawlerApiCoinService");
+	/*	CrawlerApiCoinService crawlerApiCoinService = SpringContextUtil.getBean("crawlerApiCoinService");
 		List<CrawlerApiCoin> allApiCoin = crawlerApiCoinService.getAllApiCoin();
 		for (CrawlerApiCoin coin : allApiCoin) {
 			Constants.API_COINS.add(coin);
 		}
 
 		new Thread(new BishijieRunnable()).start();
-		logger.info("币世界爬虫启动....");
+		logger.info("币世界爬虫启动....");*/
 	}
 
 }
