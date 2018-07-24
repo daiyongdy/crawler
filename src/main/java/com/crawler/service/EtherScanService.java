@@ -26,6 +26,13 @@ public class EtherScanService {
 	private EtherScanMapper etherScanMapper;
 
 	public void addEtherScan(String id) {
+
+		EtherScan etherScan1 = etherScanMapper.selectByPrimaryKey(id);
+		if (etherScan1 != null) {
+			logger.error("[etherscan] EtherScanService 当前id已经存在 直接返回, id:{}", id);
+			return;
+		}
+
 		EtherScan etherScan = new EtherScan();
 		etherScan.setId(id);
 		String currHeight = getFirstHeight(id);
@@ -33,11 +40,11 @@ public class EtherScanService {
 			logger.error("[etherscan] EtherScanService 没有获取当前height, id:{}", id);
 		}
 		etherScan.setCurrHeight(currHeight);
-		etherScan.setCreateTime(new Date());
+		etherScan.setCreatedAt(new Date());
 		etherScanMapper.insert(etherScan);
 
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -48,7 +55,7 @@ public class EtherScanService {
 			etherScan.setHash(line.getHash());
 			etherScan.setTimestamp(line.getTimestamp());
 			etherScan.setIsProcessed(true);
-			etherScan.setUpdateTime(new Date());
+			etherScan.setUpdatedAt(new Date());
 			etherScanMapper.updateByPrimaryKey(etherScan);
 		} else {
 			logger.error("[etherscan] EtherScanService 没有获取下一个height, id:{}", id);
@@ -60,9 +67,9 @@ public class EtherScanService {
 	 *  获取第一个height
 	 */
 	private String getFirstHeight(String id) {
-		String currentHeight = ApiProvider.getFirstHeight(id);
+		String currentHeight = HtmlProvider.getFirstHeight(id);
 		if (!StringUtils.isNotBlank(currentHeight)) {
-			currentHeight = HtmlProvider.getFirstHeight(id);
+			currentHeight = ApiProvider.getFirstHeight(id);
 		}
 		return currentHeight;
 	}
@@ -74,9 +81,9 @@ public class EtherScanService {
 	 * @return
 	 */
 	private Line getNextLine(String currHeight, String id) {
-		Line line = ApiProvider.getNextLine(currHeight, id);
+		Line line = HtmlProvider.getNextLine(currHeight, id);
 		if (line == null) {
-			line = HtmlProvider.getNextLine(currHeight, id);
+			line = ApiProvider.getNextLine(currHeight, id);
 		}
 		return line;
 	}

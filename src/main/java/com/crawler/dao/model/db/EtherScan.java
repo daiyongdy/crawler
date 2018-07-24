@@ -15,9 +15,9 @@ public class EtherScan {
 
     private Boolean isProcessed;
 
-    private Date createTime;
+    private Date createdAt;
 
-    private Date updateTime;
+    private Date updatedAt;
 
     public String getId() {
         return id;
@@ -67,19 +67,19 @@ public class EtherScan {
         this.isProcessed = isProcessed;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

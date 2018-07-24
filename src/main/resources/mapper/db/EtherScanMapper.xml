@@ -8,8 +8,8 @@
     <result column="hash" property="hash" jdbcType="VARCHAR" />
     <result column="timestamp" property="timestamp" jdbcType="VARCHAR" />
     <result column="is_processed" property="isProcessed" jdbcType="BIT" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, curr_height, next_height, hash, timestamp, is_processed, create_time, update_time
+    id, curr_height, next_height, hash, timestamp, is_processed, created_at, updated_at
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.crawler.dao.model.db.EtherScanExample" >
     select
@@ -105,10 +105,10 @@
   <insert id="insert" parameterType="com.crawler.dao.model.db.EtherScan" >
     insert into etherscan (id, curr_height, next_height, 
       hash, timestamp, is_processed, 
-      create_time, update_time)
+      created_at, updated_at)
     values (#{id,jdbcType=VARCHAR}, #{currHeight,jdbcType=VARCHAR}, #{nextHeight,jdbcType=VARCHAR}, 
       #{hash,jdbcType=VARCHAR}, #{timestamp,jdbcType=VARCHAR}, #{isProcessed,jdbcType=BIT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.crawler.dao.model.db.EtherScan" >
     insert into etherscan
@@ -131,11 +131,11 @@
       <if test="isProcessed != null" >
         is_processed,
       </if>
-      <if test="createTime != null" >
-        create_time,
+      <if test="createdAt != null" >
+        created_at,
       </if>
-      <if test="updateTime != null" >
-        update_time,
+      <if test="updatedAt != null" >
+        updated_at,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -157,11 +157,11 @@
       <if test="isProcessed != null" >
         #{isProcessed,jdbcType=BIT},
       </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
+      <if test="createdAt != null" >
+        #{createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
+      <if test="updatedAt != null" >
+        #{updatedAt,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -192,11 +192,11 @@
       <if test="record.isProcessed != null" >
         is_processed = #{record.isProcessed,jdbcType=BIT},
       </if>
-      <if test="record.createTime != null" >
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      <if test="record.createdAt != null" >
+        created_at = #{record.createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateTime != null" >
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      <if test="record.updatedAt != null" >
+        updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -211,8 +211,8 @@
       hash = #{record.hash,jdbcType=VARCHAR},
       timestamp = #{record.timestamp,jdbcType=VARCHAR},
       is_processed = #{record.isProcessed,jdbcType=BIT},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -235,11 +235,11 @@
       <if test="isProcessed != null" >
         is_processed = #{isProcessed,jdbcType=BIT},
       </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+      <if test="createdAt != null" >
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      <if test="updatedAt != null" >
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -251,8 +251,8 @@
       hash = #{hash,jdbcType=VARCHAR},
       timestamp = #{timestamp,jdbcType=VARCHAR},
       is_processed = #{isProcessed,jdbcType=BIT},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

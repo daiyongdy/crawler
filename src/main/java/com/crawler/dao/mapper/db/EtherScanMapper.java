@@ -2,9 +2,8 @@ package com.crawler.dao.mapper.db;
 
 import com.crawler.dao.model.db.EtherScan;
 import com.crawler.dao.model.db.EtherScanExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface EtherScanMapper {
     int countByExample(EtherScanExample example);
