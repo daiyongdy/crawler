@@ -4,6 +4,8 @@
 
     <Properties>
         <Property name="rootPath">/data/logs/crawler</Property>
+        <Property name="sysLogFilePath">${rootPath}/sys.log</Property>
+        <Property name="cronLogFilePath">${rootPath}/cron.log</Property>
         <Property name="debug">debug</Property>
         <Property name="isBufferedIO">true</Property>
         <Property name="isImmediateFlush">true</Property>
@@ -13,57 +15,47 @@
     </Properties>
 
     <Appenders>
-        <Console name="STDOUT" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d[%p]%C{1}.%M(%L)|%m%n"/>
-        </Console>
+        <RollingRandomAccessFile name="sysLogAppender"
+                                 fileName="${sysLogFilePath}" filePattern="${sysLogFilePath}.%d{yyyyMMdd}.%i.log"
+                                 immediateFlush="${isImmediateFlush}" ignoreExceptions="${isIgnoreExceptions}"
+                                 bufferSize="${bufferSize}">
+            <PatternLayout>
+                <Pattern>%d[%p]%C{1}.%M(%L)|%m%n</Pattern>
+                <charset>${encodingType}</charset>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB" />
+            </Policies>
+        </RollingRandomAccessFile>
+        <Async name="asyncSysLogAppender">
+            <AppenderRef ref="sysLogAppender"></AppenderRef>
+        </Async>
 
-
+        <RollingRandomAccessFile name="cronLogAppender"
+                                 fileName="${cronLogFilePath}" filePattern="${cronLogFilePath}.%d{yyyyMMdd}.%i.log"
+                                 immediateFlush="${isImmediateFlush}" ignoreExceptions="${isIgnoreExceptions}"
+                                 bufferSize="${bufferSize}">
+            <PatternLayout>
+                <Pattern>%d[%p]%C{1}.%M(%L)|%m%n</Pattern>
+                <charset>${encodingType}</charset>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB" />
+            </Policies>
+        </RollingRandomAccessFile>
+        <Async name="asyncCronLogAppender">
+            <AppenderRef ref="cronLogAppender"></AppenderRef>
+        </Async>
     </Appenders>
 
     <Loggers>
-
-        <Root level="info">
-            <AppenderRef ref="STDOUT"/>
-        </Root>
-        <logger name="log4j.logger.noModule" level="fatal" additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
-        <logger name="log4j.logger.org.mybatis.jpetstore" level="trace" additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
-        <logger name="log4j.logger.com.opensymphony.xwork2" level="debug" additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
-        <logger name="log4j.logger.com.ibatis" level="trace" additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
-        <logger name="log4j.logger.com.ibatis.common.jdbc.SimpleDataSource" level="debug" additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
-        <logger name="log4j.logger.com.ibatis.common.jdbc.ScriptRunner" level="debug" additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
-        <logger name="log4j.logger.com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="debug"
-                additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
-        <logger name="log4j.logger.org.mybatis" level="debug" additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
-        <logger name="log4j.logger.java.sql" level="debug" additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
-        <logger name="log4j.logger.java.sql.Connection" level="debug" additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
-        <logger name="log4j.logger.java.sql.Statement" level="debug" additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
-        <logger name="log4j.logger.java.sql.PreparedStatement" level="debug" additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
-        <logger name="log4j.logger.java.sql.ResultSet" level="debug" additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
+        <Logger name="sysLog" level="debug" additivity="false">
+            <AppenderRef ref="sysLogAppender"></AppenderRef>
+        </Logger>
+        <Logger name="asyncLog" level="debug" additivity="false">
+            <AppenderRef ref="cronLogAppender"></AppenderRef>
+        </Logger>
     </Loggers>
 </Configuration>

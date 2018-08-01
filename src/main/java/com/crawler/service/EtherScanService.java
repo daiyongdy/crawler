@@ -2,9 +2,11 @@ package com.crawler.service;
 
 import com.crawler.dao.mapper.db.EtherScanMapper;
 import com.crawler.dao.model.db.EtherScan;
+import com.crawler.dao.model.db.EtherScanExample;
 import com.crawler.web.ethrescan.ApiProvider;
 import com.crawler.web.ethrescan.HtmlProvider;
 import com.crawler.web.ethrescan.Line;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by daiyong on 2018/7/18.
@@ -20,7 +23,9 @@ import java.util.Date;
 @Service
 public class EtherScanService {
 
-	private static final Logger logger = LogManager.getLogger(EtherScanService.class);
+	private static final Logger logger = LogManager.getLogger("sysLog");
+
+	private static final Long TEN_MINUTES = 4L * 60L * 1000L;
 
 	@Autowired
 	private EtherScanMapper etherScanMapper;
@@ -49,7 +54,7 @@ public class EtherScanService {
 			e.printStackTrace();
 		}
 
-		Line line = getNextLine(currHeight, id);
+		Line line = getNextLine(currHeight, id, false);
 		if (line != null) {
 			etherScan.setNextHeight(line.getHeight());
 			etherScan.setHash(line.getHash());
@@ -66,7 +71,7 @@ public class EtherScanService {
 	/**
 	 *  获取第一个height
 	 */
-	private String getFirstHeight(String id) {
+	public String getFirstHeight(String id) {
 		String currentHeight = HtmlProvider.getFirstHeight(id);
 		if (!StringUtils.isNotBlank(currentHeight)) {
 			currentHeight = ApiProvider.getFirstHeight(id);
@@ -78,14 +83,41 @@ public class EtherScanService {
 	 * 获取下一个Line
 	 * @param currHeight
 	 * @param id
+	 * @param retry
 	 * @return
 	 */
-	private Line getNextLine(String currHeight, String id) {
-		Line line = HtmlProvider.getNextLine(currHeight, id);
+	public Line getNextLine(String currHeight, String id, boolean retry) {
+		Line line = HtmlProvider.getNextLine(currHeight, id, retry);
 		if (line == null) {
-			line = ApiProvider.getNextLine(currHeight, id);
+			line = ApiProvider.getNextLine(currHeight, id, retry);
 		}
 		return line;
+	}
+
+
+	/**
+	 * 获取超时没有填充的记录
+	 * @return
+	 */
+	public List<EtherScan> getTimeoutEtherScans() {
+
+		List<EtherScan> result = Lists.newArrayList();
+
+		EtherScanExample etherScanExample = new EtherScanExample();
+		EtherScanExample.Criteria criteria = etherScanExample.createCriteria();
+		criteria.andNextHeightIsNull();
+		List<EtherScan> etherScans = etherScanMapper.selectByExample(etherScanExample);
+		for (EtherScan etherScan : etherScans) {
+			if ( (System.currentTimeMillis() - etherScan.getCreatedAt().getTime()) >= TEN_MINUTES ) {
+				result.add(etherScan);
+			}
+		}
+
+		return result;
+	}
+
+	public static void main(String[] args) {
+		System.out.println(System.currentTimeMillis());
 	}
 
 

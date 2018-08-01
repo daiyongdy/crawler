@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  */
 public class HtmlProvider {
 
-	private static final Logger logger = LogManager.getLogger(HtmlProvider.class);
+	private static final Logger logger = LogManager.getLogger("sysLog");
 
 	private static final String MAIN_URL = "https://etherscan.io/blocks";
 
@@ -45,7 +45,7 @@ public class HtmlProvider {
 	}
 
 	public static String getFirstHeight(String id) {
-		int times = 2;
+		int times = 10;
 		for (int i = 0; i < times; i++) {
 			try {
 				logger.info("[echerscan HtmlProvider getFirstHeight]" + " 第" + (i + 1) + "次爬取当前height, id:{}", id);
@@ -66,16 +66,17 @@ public class HtmlProvider {
 		return StringUtils.EMPTY;
 	}
 
-	public static Line getNextLine(String currentHeight, String id) {
+	public static Line getNextLine(String currentHeight, String id, boolean retry) {
 
 		String nextHeight = String.valueOf( (Integer.valueOf(currentHeight) + 1) );
 
-		int times = 5;
+		int times = retry ? 1 : 25;
 		for (int i = 0; i < times; i++) {
 			try {
 				logger.info("[etherscan HtmlProvider getNextLine] 第 " + (i+1) + " 次获取下一height, id:{}", id);
 
 				String nextHtml = CoohuaHttpClient.get(NEXT_URL + nextHeight, null);
+				logger.info("[etherscan HtmlProvider getNextLine] 第 " + (i+1) + " 次获取下一height, id:{}, html:{}", id, nextHtml);
 
 				if (nextHtml.contains("Unable to locate Block")) {
 					logger.error("[echerscan HtmlProvider getNextLine] 没有产生下一个height id:{}, nextHeight:{}", id, nextHeight);

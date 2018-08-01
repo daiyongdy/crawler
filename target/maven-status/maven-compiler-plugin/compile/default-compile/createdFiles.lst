@@ -25,6 +25,7 @@ com/crawler/service/EtherScanService.class
 com/crawler/dao/model/db/BetterArticleExample$Criteria.class
 com/crawler/util/httpclient/common/HttpCookies.class
 com/crawler/service/BetterCoinService.class
+com/crawler/service/QuartzService.class
 com/crawler/queue/WeiboQueue.class
 com/crawler/runnable/CrawlerRunnable$TwitterConsumer.class
 com/crawler/pool/IPPool.class

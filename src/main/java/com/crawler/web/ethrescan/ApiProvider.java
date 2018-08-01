@@ -18,14 +18,14 @@ import java.util.Date;
  */
 public class ApiProvider {
 
-	private static final Logger logger = LogManager.getLogger(ApiProvider.class);
+	private static final Logger logger = LogManager.getLogger("sysLog");
 
 	private static final String MAIN_URL = "https://api.blockcypher.com/v1/eth/main";
 
 	private static final String NEXT_URL = "https://api.blockcypher.com/v1/eth/main/blocks/";
 
 	public static String getFirstHeight(String id) {
-		int times = 3;
+		int times = 10;
 		for (int i = 0; i < times; i++) {
 			logger.info("[etherscan ApiProvider getFirstHeight] 第 " + (i+1) + " 次获取当前height, id:{}", id);
 			try {
@@ -46,13 +46,14 @@ public class ApiProvider {
 		return StringUtils.EMPTY;
 	}
 
-	public static Line getNextLine(String currentHeight, String id) {
+	public static Line getNextLine(String currentHeight, String id, boolean retry) {
 		String nextHeight = String.valueOf( (Integer.valueOf(currentHeight) + 1) );
-		int times = 5;
+		int times = retry ? 1 : 25;
 		for (int i = 0; i < times; i++) {
 			logger.info("[etherscan ApiProvider getNextLine] 第 " + (i+1) + " 次获取下一height, id:{}", id);
 			try {
 				String json = CoohuaHttpClient.get(NEXT_URL + nextHeight, "");
+				logger.info("[etherscan ApiProvider getNextLine] 第 " + (i+1) + " 次获取下一height, id:{}, json:{}", id, json);
 				JSONObject jsonObject = JSONObject.parseObject(json);
 				String error = jsonObject.getString("error");
 				if (StringUtils.isNotBlank(error)) {
@@ -99,7 +100,7 @@ public class ApiProvider {
 //			e.printStackTrace();
 //		}
 
-		Line sdf = getNextLine("5991846", "sdf");
+		Line sdf = getNextLine("5991846", "sdf", false);
 		System.out.println("+++++++++" + JSON.toJSONString(sdf));
 
 	}

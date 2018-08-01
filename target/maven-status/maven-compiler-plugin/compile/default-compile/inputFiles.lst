@@ -15,6 +15,7 @@
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/ArticleExample.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/httpclient/common/HttpMethods.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/mapper/db/FeiXiaoHaoCoinDetailMapper.java
+/Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/service/QuartzService.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/BetterArticle.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/httpclient/common/Utils.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/EtherScan.java

@@ -5,13 +5,12 @@ import org.apache.logging.log4j.Logger;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 //@ServletComponentScan
 @MapperScan({"com.crawler.dao.mapper.db","com.crawler.dao.mapper.biz"})
-/**
- *  cui zhen
- */
+@EnableScheduling
 public class Bootstrap {
 
 	private static Logger logger = LogManager.getLogger("Bootstrap");
