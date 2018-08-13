@@ -8,6 +8,6 @@ import com.crawler.dao.model.db.JumpAround;
  */
 public interface JumpAroundBizMapper {
 
-	public JumpAround lockGet(String aroundId);
+	JumpAround lockGet(String aroundId);
 
 }

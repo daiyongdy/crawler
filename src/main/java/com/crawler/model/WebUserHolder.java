@@ -13,9 +13,9 @@ public class WebUserHolder {
 	public static WebUserDTO getUser() {
 
 		WebUserDTO userDTO = new WebUserDTO();
-		userDTO.setUserId("000000000");
-		userDTO.setUserName("代勇");
-		userDTO.setBalance(new BigDecimal(100));
+		userDTO.setUserId("000000002");
+		userDTO.setUserName("耿建");
+		userDTO.setBalance(new BigDecimal(30));
 
 		return userDTO;
 

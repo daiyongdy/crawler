@@ -1,5 +1,6 @@
 package com.crawler.controller;
 
+import com.crawler.model.AroundInfoDTO;
 import com.crawler.model.CheckDTO;
 import com.crawler.model.WebMessage;
 import com.crawler.service.AroundService;
@@ -15,26 +16,32 @@ import javax.servlet.http.HttpServletRequest;
  * email daiyong@qiyi.com
  */
 @RestController
-@RequestMapping("/api/around")
+@RequestMapping("/api/a")
 public class AroundController {
 
 	@Autowired
 	private AroundService aroundService;
 
-	@RequestMapping("/save")
+	@RequestMapping("/create")
 	public WebMessage save(@RequestParam String name,
-						   @RequestParam int pNum,
-						   @RequestParam String minPrice) {
+						   @RequestParam int mn,
+						   @RequestParam String mp) {
 
-		aroundService.saveAround(name, pNum, minPrice);
+		aroundService.saveAround(name, mn, mp);
 
 		return WebMessage.DEFAULT;
 	}
 
 	@RequestMapping("/check")
-	public WebMessage check(HttpServletRequest request, String aroundId) {
-		CheckDTO checkDTO = aroundService.check(request, aroundId);
+	public WebMessage check(HttpServletRequest request, String aid) {
+		CheckDTO checkDTO = aroundService.check(request, aid);
 		return WebMessage.build(checkDTO);
+	}
+
+	@RequestMapping("/info")
+	public WebMessage info(String aid)  {
+		AroundInfoDTO aroundInfoDTO = aroundService.getAroundInfo(aid);
+		return WebMessage.build(aroundInfoDTO);
 	}
 
 

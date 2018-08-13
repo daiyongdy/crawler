@@ -2,12 +2,14 @@ com/crawler/util/HttpClientUtil.class
 com/crawler/util/httpclient/common/HttpHeader$HttpReqHead.class
 com/crawler/dao/model/db/JumpSettleDetailExample$Criteria.class
 com/crawler/util/httpclient/AgentStore.class
+com/crawler/model/AroundInfoDTO.class
 com/crawler/interceptor/ApiInceptor.class
 com/crawler/util/httpclient/common/SSLs$SSLProtocolVersion.class
 com/crawler/model/CheckDTO.class
 com/crawler/util/Md5Utils.class
 com/crawler/dao/model/db/JumpSettleExample$Criterion.class
 com/crawler/model/WebUserHolder.class
+com/crawler/model/AroundInfoDTO$Participant.class
 com/crawler/util/httpclient/common/HttpHeader$Headers.class
 com/crawler/util/PropertiesUtil.class
 com/crawler/dao/mapper/db/JumpAroundMapper.class
@@ -15,11 +17,13 @@ com/crawler/util/httpclient/common/util/OCR.class
 com/crawler/dao/model/db/JumpAroundExample$GeneratedCriteria.class
 com/crawler/dao/model/db/JumpParticipantExample$Criterion.class
 com/crawler/dao/model/db/JumpParticipantExample.class
+com/crawler/util/RequestUtils.class
 com/crawler/Bootstrap.class
 com/crawler/controller/GlobalExceptionHandler.class
 com/crawler/configuration/MvcConfiguration.class
 com/crawler/util/httpclient/common/HttpHeader.class
 com/crawler/controller/AroundController.class
+com/crawler/interceptor/SignInceptor.class
 com/crawler/service/AroundService.class
 com/crawler/dao/model/db/JumpAround.class
 com/crawler/dao/model/db/JumpAroundExample$Criterion.class
@@ -30,6 +34,7 @@ com/crawler/dao/model/db/JumpAroundExample.class
 com/crawler/util/StringUtil.class
 com/crawler/dao/model/db/JumpParticipant.class
 com/crawler/dao/model/db/JumpSettleExample$Criteria.class
+com/crawler/service/ParticipantService$PointCompator.class
 com/crawler/dao/model/db/JumpSettleDetailExample$Criterion.class
 com/crawler/util/httpclient/HttpClientUtil.class
 com/crawler/dao/mapper/db/JumpSettleDetailMapper.class
@@ -49,6 +54,7 @@ com/crawler/util/httpclient/builder/HCB.class
 com/crawler/model/WebMessage.class
 com/crawler/util/httpclient/common/SSLs$SSLHandler.class
 com/crawler/util/DeviceUtil.class
+com/crawler/controller/ParticipantController.class
 com/crawler/dao/model/db/JumpSettleDetailExample.class
 com/crawler/util/SpringContextUtil.class
 com/crawler/dao/model/db/JumpAroundExample$Criteria.class
@@ -57,6 +63,7 @@ com/crawler/util/httpclient/common/Utils.class
 com/crawler/dao/mapper/db/JumpSettleMapper.class
 com/crawler/util/httpclient/exception/HttpProcessException.class
 com/crawler/dao/mapper/db/JumpParticipantMapper.class
+com/crawler/dao/mapper/biz/JumpAroundBizMapper.class
 com/crawler/dao/model/db/JumpParticipantExample$Criteria.class
 com/crawler/dao/model/db/JumpParticipantExample$GeneratedCriteria.class
 com/crawler/util/CheckMobile.class

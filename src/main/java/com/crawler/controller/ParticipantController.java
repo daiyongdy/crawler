@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * email daiyong@qiyi.com
  */
 @RestController
-@RequestMapping("/api/participant")
+@RequestMapping("/api/p")
 public class ParticipantController {
 
 	@Autowired
@@ -20,13 +20,24 @@ public class ParticipantController {
 
 	/**
 	 * 客户积分
-	 * @param score
+	 * @param pts
 	 * @return
 	 */
-	@RequestMapping("/score")
-	public WebMessage score(@RequestParam int score) {
-		boolean scoreResult = participantService.score(score);
+	@RequestMapping("/report")
+	public WebMessage score(@RequestParam int pts) {
+		boolean scoreResult = participantService.score(pts);
 		return WebMessage.build(scoreResult);
+	}
+
+	/**
+	 * 参与游戏
+	 * @param aid
+	 * @return
+	 */
+	@RequestMapping("/join")
+	public WebMessage join(@RequestParam String aid) {
+		boolean joinResult = participantService.join(aid);
+		return WebMessage.build(joinResult);
 	}
 
 }

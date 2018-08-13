@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.crawler.dao.mapper.biz.JumpAroundBizMapper" >
+
   <resultMap id="BaseResultMap" type="com.crawler.dao.model.db.JumpAround" >
     <id column="around_id" property="aroundId" jdbcType="VARCHAR" />
     <result column="around_name" property="aroundName" jdbcType="VARCHAR" />
@@ -20,10 +21,10 @@
     status, creater_id, creater_name, create_time, update_time
   </sql>
 
-  <select id="lockGet" resultMap="BaseResultMap" parameterType="string">
+  <select id="lockGet" resultMap="BaseResultMap" parameterType="java.lang.String">
     SELECT
     <include refid="Base_Column_List"/>
-    from jump_around where around_id = #{value} for update
+    from jump_around where around_id = #{value}
   </select>
 
 
