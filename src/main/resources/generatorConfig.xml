@@ -7,7 +7,7 @@
         <commentGenerator>
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://127.0.0.1:3306/crawler?characterEncoding=UTF-8" userId="root" password="12345"/>
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://127.0.0.1:3306/jump?characterEncoding=UTF-8" userId="root" password="12345"/>
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
@@ -17,16 +17,13 @@
         <sqlMapGenerator targetPackage="mapper.db" targetProject="src/main/resources"/>
 
         <javaClientGenerator targetPackage="com.crawler.dao.mapper.db" targetProject="/Users/daiyong/work/personal/project/crawer/src/main/java" type="XMLMAPPER"/>
-        <!--<table tableName="zombie_user" domainObjectName="ZombieUser"></table>-->
-        <!--<table tableName="article" domainObjectName="Article"></table>-->
-        <!--<table tableName="coin" domainObjectName="Coin"></table>-->
-        <!--<table tableName="feixiaohao_coin" domainObjectName="FeiXiaoHaoCoin"></table>-->
-        <!--<table tableName="feixiaohao_coin_detail" domainObjectName="FeiXiaoHaoCoinDetail"></table>-->
-      <!--  <table tableName="better_coin" domainObjectName="BetterCoin"></table>
-        <table tableName="better_article" domainObjectName="BetterArticle"></table>-->
-        <!--<table tableName="bishijie_keyword" domainObjectName="BishijieKeyword"></table>-->
-        <!--<table tableName="bishijie_article" domainObjectName="BishijieArticle"></table>-->
-        <!--<table tableName="crawler_api_coin" domainObjectName="CrawlerApiCoin"></table>-->
-        <table tableName="etherscan" domainObjectName="EtherScan"></table>
+
+        <table tableName="jump_around" domainObjectName="JumpAround">
+            <!--<generatedKey column="around_id" sqlStatement="SELECT LAST_INSERT_ID()"/>-->
+        </table>
+        <!--<table tableName="jump_participant" domainObjectName="JumpParticipant"></table>-->
+        <!--<table tableName="jump_settle" domainObjectName="JumpSettle"></table>-->
+        <!--<table tableName="jump_settle_detail" domainObjectName="JumpSettleDetail"></table>-->
+
     </context>
 </generatorConfiguration>

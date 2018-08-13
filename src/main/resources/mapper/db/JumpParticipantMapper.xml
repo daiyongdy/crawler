@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crawler.dao.mapper.db.JumpParticipantMapper" >
+  <resultMap id="BaseResultMap" type="com.crawler.dao.model.db.JumpParticipant" >
+    <id column="participant_id" property="participantId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="participant_name" property="participantName" jdbcType="VARCHAR" />
+    <result column="around_id" property="aroundId" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="point" property="point" jdbcType="INTEGER" />
+    <result column="rank_num" property="rankNum" jdbcType="INTEGER" />
+    <result column="is_win" property="isWin" jdbcType="BIT" />
+    <result column="is_over" property="isOver" jdbcType="BIT" />
+    <result column="participant_time" property="participantTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    participant_id, user_id, participant_name, around_id, money, point, rank_num, is_win, 
+    is_over, participant_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.crawler.dao.model.db.JumpParticipantExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from jump_participant
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from jump_participant
+    where participant_id = #{participantId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from jump_participant
+    where participant_id = #{participantId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.crawler.dao.model.db.JumpParticipantExample" >
+    delete from jump_participant
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.crawler.dao.model.db.JumpParticipant" >
+    insert into jump_participant (participant_id, user_id, participant_name, 
+      around_id, money, point, 
+      rank_num, is_win, is_over, participant_time, 
+      update_time)
+    values (#{participantId,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{participantName,jdbcType=VARCHAR}, 
+      #{aroundId,jdbcType=VARCHAR}, #{money,jdbcType=DECIMAL}, #{point,jdbcType=INTEGER}, 
+      #{rankNum,jdbcType=INTEGER}, #{isWin,jdbcType=BIT}, #{isOver,jdbcType=BIT}, #{participantTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crawler.dao.model.db.JumpParticipant" >
+    insert into jump_participant
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="participantId != null" >
+        participant_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="participantName != null" >
+        participant_name,
+      </if>
+      <if test="aroundId != null" >
+        around_id,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="point != null" >
+        point,
+      </if>
+      <if test="rankNum != null" >
+        rank_num,
+      </if>
+      <if test="isWin != null" >
+        is_win,
+      </if>
+      <if test="isOver != null" >
+        is_over,
+      </if>
+      <if test="participantTime != null" >
+        participant_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="participantId != null" >
+        #{participantId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="participantName != null" >
+        #{participantName,jdbcType=VARCHAR},
+      </if>
+      <if test="aroundId != null" >
+        #{aroundId,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="point != null" >
+        #{point,jdbcType=INTEGER},
+      </if>
+      <if test="rankNum != null" >
+        #{rankNum,jdbcType=INTEGER},
+      </if>
+      <if test="isWin != null" >
+        #{isWin,jdbcType=BIT},
+      </if>
+      <if test="isOver != null" >
+        #{isOver,jdbcType=BIT},
+      </if>
+      <if test="participantTime != null" >
+        #{participantTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.crawler.dao.model.db.JumpParticipantExample" resultType="java.lang.Integer" >
+    select count(*) from jump_participant
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update jump_participant
+    <set >
+      <if test="record.participantId != null" >
+        participant_id = #{record.participantId,jdbcType=BIGINT},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.participantName != null" >
+        participant_name = #{record.participantName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.aroundId != null" >
+        around_id = #{record.aroundId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.money != null" >
+        money = #{record.money,jdbcType=DECIMAL},
+      </if>
+      <if test="record.point != null" >
+        point = #{record.point,jdbcType=INTEGER},
+      </if>
+      <if test="record.rankNum != null" >
+        rank_num = #{record.rankNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.isWin != null" >
+        is_win = #{record.isWin,jdbcType=BIT},
+      </if>
+      <if test="record.isOver != null" >
+        is_over = #{record.isOver,jdbcType=BIT},
+      </if>
+      <if test="record.participantTime != null" >
+        participant_time = #{record.participantTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update jump_participant
+    set participant_id = #{record.participantId,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      participant_name = #{record.participantName,jdbcType=VARCHAR},
+      around_id = #{record.aroundId,jdbcType=VARCHAR},
+      money = #{record.money,jdbcType=DECIMAL},
+      point = #{record.point,jdbcType=INTEGER},
+      rank_num = #{record.rankNum,jdbcType=INTEGER},
+      is_win = #{record.isWin,jdbcType=BIT},
+      is_over = #{record.isOver,jdbcType=BIT},
+      participant_time = #{record.participantTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crawler.dao.model.db.JumpParticipant" >
+    update jump_participant
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="participantName != null" >
+        participant_name = #{participantName,jdbcType=VARCHAR},
+      </if>
+      <if test="aroundId != null" >
+        around_id = #{aroundId,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="point != null" >
+        point = #{point,jdbcType=INTEGER},
+      </if>
+      <if test="rankNum != null" >
+        rank_num = #{rankNum,jdbcType=INTEGER},
+      </if>
+      <if test="isWin != null" >
+        is_win = #{isWin,jdbcType=BIT},
+      </if>
+      <if test="isOver != null" >
+        is_over = #{isOver,jdbcType=BIT},
+      </if>
+      <if test="participantTime != null" >
+        participant_time = #{participantTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where participant_id = #{participantId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crawler.dao.model.db.JumpParticipant" >
+    update jump_participant
+    set user_id = #{userId,jdbcType=VARCHAR},
+      participant_name = #{participantName,jdbcType=VARCHAR},
+      around_id = #{aroundId,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DECIMAL},
+      point = #{point,jdbcType=INTEGER},
+      rank_num = #{rankNum,jdbcType=INTEGER},
+      is_win = #{isWin,jdbcType=BIT},
+      is_over = #{isOver,jdbcType=BIT},
+      participant_time = #{participantTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where participant_id = #{participantId,jdbcType=BIGINT}
+  </update>
+</mapper>
