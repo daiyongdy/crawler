@@ -84,17 +84,18 @@ public class AroundInfoDTO {
 	}
 
 	public static class Participant {
-		private String participantName;
+		private String name;
 		private Date endTime;
 		private String point;
 		private String rank;
+		private Boolean isWin;
 
-		public String getParticipantName() {
-			return participantName;
+		public String getName() {
+			return name;
 		}
 
-		public void setParticipantName(String participantName) {
-			this.participantName = participantName;
+		public void setName(String name) {
+			this.name = name;
 		}
 
 		public Date getEndTime() {
@@ -121,6 +122,13 @@ public class AroundInfoDTO {
 			this.rank = rank;
 		}
 
+		public Boolean getIsWin() {
+			return isWin;
+		}
+
+		public void setIsWin(Boolean win) {
+			isWin = win;
+		}
 	}
 
 }

@@ -5,7 +5,8 @@
     <Properties>
         <Property name="rootPath">/data/logs/crawler</Property>
         <Property name="sysLogFilePath">${rootPath}/sys.log</Property>
-        <Property name="cronLogFilePath">${rootPath}/cron.log</Property>
+        <Property name="errorLogFilePath">${rootPath}/error.log</Property>
+        <Property name="reportLogFilePath">${rootPath}/report.log</Property>
         <Property name="debug">debug</Property>
         <Property name="isBufferedIO">true</Property>
         <Property name="isImmediateFlush">true</Property>
@@ -35,8 +36,8 @@
             <AppenderRef ref="sysLogAppender"></AppenderRef>
         </Async>
 
-        <RollingRandomAccessFile name="cronLogAppender"
-                                 fileName="${cronLogFilePath}" filePattern="${cronLogFilePath}.%d{yyyyMMdd}.%i.log"
+        <RollingRandomAccessFile name="reportLogAppender"
+                                 fileName="${reportLogFilePath}" filePattern="${reportLogFilePath}.%d{yyyyMMdd}.%i.log"
                                  immediateFlush="${isImmediateFlush}" ignoreExceptions="${isIgnoreExceptions}"
                                  bufferSize="${bufferSize}">
             <PatternLayout>
@@ -48,9 +49,29 @@
                 <SizeBasedTriggeringPolicy size="250 MB" />
             </Policies>
         </RollingRandomAccessFile>
-        <Async name="asyncCronLogAppender">
-            <AppenderRef ref="cronLogAppender"></AppenderRef>
+        <Async name="asyncReportLogAppender">
+            <AppenderRef ref="reportLogAppender"></AppenderRef>
         </Async>
+
+        <RollingRandomAccessFile name="errorLogAppender"
+                                 fileName="${errorLogFilePath}" filePattern="${errorLogFilePath}.%d{yyyyMMdd}.%i.log"
+                                 immediateFlush="${isImmediateFlush}" ignoreExceptions="${isIgnoreExceptions}"
+                                 bufferSize="${bufferSize}">
+            <PatternLayout>
+                <Pattern>%d[%p]%C{1}.%M(%L)|%m%n</Pattern>
+                <charset>${encodingType}</charset>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB" />
+            </Policies>
+        </RollingRandomAccessFile>
+        <Async name="asyncErrorLogAppender">
+            <AppenderRef ref="errorLogAppender"></AppenderRef>
+        </Async>
+
+
+
     </Appenders>
 
     <Loggers>
@@ -60,8 +81,11 @@
         <Logger name="sysLog" level="debug" additivity="false">
             <AppenderRef ref="sysLogAppender"></AppenderRef>
         </Logger>
-        <Logger name="asyncLog" level="debug" additivity="false">
-            <AppenderRef ref="cronLogAppender"></AppenderRef>
+        <Logger name="errorLog" level="debug" additivity="false">
+            <AppenderRef ref="errorLogAppender"></AppenderRef>
+        </Logger>
+        <Logger name="reportLog" level="debug" additivity="false">
+            <AppenderRef ref="reportLogAppender"></AppenderRef>
         </Logger>
         <logger name="log4j.logger.noModule" level="fatal" additivity="false">
             <appender-ref ref="STDOUT"/>

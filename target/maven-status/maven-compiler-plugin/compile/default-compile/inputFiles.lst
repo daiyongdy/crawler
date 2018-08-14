@@ -3,6 +3,7 @@
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/httpclient/exception/HttpProcessException.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/model/CheckDTO.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/JumpSettleDetailExample.java
+/Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/MD5Utils.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/httpclient/common/HttpMethods.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/CheckMobile.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/httpclient/common/Utils.java
@@ -41,7 +42,6 @@
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/httpclient/builder/HCB.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/RequestUtils.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/Bootstrap.java
-/Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/Md5Utils.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/model/WebMessage.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/dao/model/db/JumpParticipant.java
 /Users/daiyong/work/personal/project/crawer/src/main/java/com/crawler/util/httpclient/HttpClientUtil.java

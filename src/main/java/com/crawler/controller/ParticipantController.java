@@ -24,7 +24,7 @@ public class ParticipantController {
 	 * @return
 	 */
 	@RequestMapping("/report")
-	public WebMessage score(@RequestParam int pts) {
+	public WebMessage score(@RequestParam String userId, @RequestParam int pts) {
 		boolean scoreResult = participantService.score(pts);
 		return WebMessage.build(scoreResult);
 	}

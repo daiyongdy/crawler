@@ -6,7 +6,6 @@ com/crawler/model/AroundInfoDTO.class
 com/crawler/interceptor/ApiInceptor.class
 com/crawler/util/httpclient/common/SSLs$SSLProtocolVersion.class
 com/crawler/model/CheckDTO.class
-com/crawler/util/Md5Utils.class
 com/crawler/dao/model/db/JumpSettleExample$Criterion.class
 com/crawler/model/WebUserHolder.class
 com/crawler/model/AroundInfoDTO$Participant.class
@@ -44,6 +43,7 @@ com/crawler/util/httpclient/common/SSLs$1.class
 com/crawler/dao/model/db/JumpSettle.class
 com/crawler/util/httpclient/common/HttpConfig.class
 com/crawler/util/UUIDGenerator.class
+com/crawler/util/MD5Utils.class
 com/crawler/dao/model/db/JumpSettleExample.class
 com/crawler/exception/BizException.class
 com/crawler/util/httpclient/common/HttpMethods.class

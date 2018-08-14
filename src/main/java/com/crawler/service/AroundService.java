@@ -1,9 +1,11 @@
 package com.crawler.service;
 
+import com.alibaba.fastjson.JSON;
 import com.crawler.dao.mapper.biz.JumpAroundBizMapper;
 import com.crawler.dao.mapper.db.JumpAroundMapper;
 import com.crawler.dao.mapper.db.JumpParticipantMapper;
 import com.crawler.dao.model.db.JumpAround;
+import com.crawler.dao.model.db.JumpAroundExample;
 import com.crawler.dao.model.db.JumpParticipant;
 import com.crawler.exception.BizException;
 import com.crawler.model.AroundInfoDTO;
@@ -14,10 +16,13 @@ import com.crawler.util.DeviceUtil;
 import com.crawler.util.UUIDGenerator;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -31,6 +36,8 @@ import java.util.List;
 @Service
 @Transactional
 public class AroundService {
+
+	private static final Logger LOG = LogManager.getLogger("sysLog");
 
 	@Autowired
 	private JumpAroundMapper aroundMapper;
@@ -51,54 +58,69 @@ public class AroundService {
 	/**
 	 * 创建回合
 	 * @param name
-	 * @param pNum
-	 * @param minPrice
+	 * @param minParticipant
+	 * @param minMoney
 	 */
-	public void saveAround(String name, int pNum, String minPrice) {
+	public void saveAround(String name, int minParticipant, String minMoney) {
 
 		WebUserDTO user = WebUserHolder.getUser();
 
-		BigDecimal minPriceDecimal = new BigDecimal(minPrice);
+		BigDecimal minMoneyDecimal = new BigDecimal(minMoney);
+		if (minMoneyDecimal.compareTo(new BigDecimal("0.001")) < 0 || minMoneyDecimal.compareTo(new BigDecimal("1")) > 0) {
+			throw BizException.MIN_MONEY_EXEED;
+		}
 		BigDecimal balance = user.getBalance();
-		if (balance.compareTo(minPriceDecimal) < 0) {
+		if (balance.compareTo(minMoneyDecimal) < 0) {
+			LOG.info("创建回合失败, 用户余额不足, userId:{}, userName:{}, userBalance:{}, aroundName:{}, aroundMinMoney:{}",
+										user.getUserId(), user.getUserName(), user.getBalance(), name, minMoney);
 			throw BizException.BALANCE_NOT_ENOUGH;
-		} else {
-
-			//创建回合
-			JumpAround around = new JumpAround();
-			around.setAroundId(UUIDGenerator.random32UUID());
-			around.setAroundName(name);
-			around.setMinParticipantsNum(pNum);
-			around.setCurrentParticipantsNum(1);
-			around.setMoney(minPriceDecimal);
-			around.setTotalAmout(minPriceDecimal);
-			around.setStatus(1); //状态： 0：新建   1：进行中 2： 已结束 3：已结算
-			around.setCreaterId(user.getUserId());
-			around.setCreaterName(user.getUserName());
-			around.setCreateTime(new Date());
-			around.setUpdateTime(null);
-			aroundMapper.insertSelective(around);
-
-			//添加回合参与人
-			JumpParticipant participant = new JumpParticipant();
-			participant.setUserId(user.getUserId());
-			participant.setParticipantName(user.getUserName());
-			participant.setAroundId(around.getAroundId());
-			participant.setMoney(around.getMoney());
-			participant.setPoint(-1);
-			participant.setRankNum(0);
-			participant.setIsWin(false);
-			participant.setIsOver(false);
-			participant.setParticipantTime(new Date());
-			participant.setUpdateTime(null);
-			participantMapper.insertSelective(participant);
-
-			//FDY 2018/8/11 下午4:48 扣减余额
-
-
 		}
 
+		boolean nameExists = isNameExists(name);
+		if (nameExists) {
+			throw BizException.NAME_EXISTS;
+		}
 
+		//创建回合
+		JumpAround around = new JumpAround();
+		around.setAroundId(UUIDGenerator.random32UUID());
+		around.setAroundName(name);
+		around.setMinParticipantsNum(minParticipant);
+		around.setCurrentParticipantsNum(1);
+		around.setMoney(minMoneyDecimal);
+		around.setTotalAmout(minMoneyDecimal);
+		around.setStatus(1); //状态： 0：新建   1：进行中 2： 已结束 3：已结算
+		around.setCreaterId(user.getUserId());
+		around.setCreaterName(user.getUserName());
+		around.setCreateTime(new Date());
+		around.setUpdateTime(null);
+		aroundMapper.insertSelective(around);
+
+		//添加回合参与人
+		JumpParticipant participant = new JumpParticipant();
+		participant.setUserId(user.getUserId());
+		participant.setParticipantName(user.getUserName());
+		participant.setAroundId(around.getAroundId());
+		participant.setMoney(around.getMoney());
+		participant.setPoint(-1);
+		participant.setRankNum(0);
+		participant.setIsWin(false);
+		participant.setIsOver(false);
+		participant.setParticipantTime(new Date());
+		participant.setUpdateTime(null);
+		participantMapper.insertSelective(participant);
+
+		//FDY 2018/8/11 下午4:48 扣减余额
+		LOG.info("创建回合成功, userId:{}, userName:{}, around:{}", user.getUserId(), user.getUserName(), JSON.toJSONString(around));
+
+	}
+
+	private boolean isNameExists(String name) {
+		JumpAroundExample example = new JumpAroundExample();
+		JumpAroundExample.Criteria criteria = example.createCriteria();
+		criteria.andAroundNameEqualTo(name);
+		List<JumpAround> jumpArounds = aroundMapper.selectByExample(example);
+		return !CollectionUtils.isEmpty(jumpArounds);
 	}
 
 	/**
@@ -205,7 +227,7 @@ public class AroundService {
 		for (JumpParticipant participant : participants) {
 			AroundInfoDTO.Participant p = new AroundInfoDTO.Participant();
 			p.setEndTime(participant.getUpdateTime());
-			p.setParticipantName(participant.getParticipantName());
+			p.setName(participant.getParticipantName());
 			if (status == 2 || status == 3 ) {
 				p.setPoint(String.valueOf(participant.getPoint()));
 				p.setRank(String.valueOf(participant.getRankNum()));
@@ -213,6 +235,7 @@ public class AroundService {
 				p.setPoint("***");
 				p.setRank("回合未结束");
 			}
+			p.setIsWin(participant.getIsWin());
 			ps.add(p);
 		}
 		aroundInfoDTO.setParticipants(ps);

@@ -153,12 +153,29 @@ public class ParticipantService {
 
 				
 				//FDY 2018/8/13 下午1:49 回合结束操作
-				/*//排序 做排名
+				//排序 做排名
 				Collections.sort(aroundParticipants, new PointCompator());
 				for (int i = 0; i < aroundParticipants.size(); i++) {
 					JumpParticipant participant1 = aroundParticipants.get(i);
 					participant1.setRankNum(i + 1);
-				}*/
+				}
+				if (aroundParticipants.size() <= 20) {
+					JumpParticipant participant1 = aroundParticipants.get(0);
+					participant1.setIsWin(true);
+				} else {
+					int winNum = (int) (aroundParticipants.size() * 0.1);
+					for (int i = 0; i < aroundParticipants.size(); i++) {
+						if ((i + 1) <= winNum) {
+							JumpParticipant participant1 = aroundParticipants.get(i);
+							participant1.setIsWin(true);
+						} else {
+							break;
+						}
+					}
+				}
+				for (JumpParticipant aroundParticipant : aroundParticipants) {
+					participantMapper.updateByPrimaryKeySelective(aroundParticipant);
+				}
 
 			}
 		}
@@ -243,7 +260,7 @@ public class ParticipantService {
 		JumpParticipantExample example = new JumpParticipantExample();
 		JumpParticipantExample.Criteria criteria = example.createCriteria();
 		criteria.andAroundIdEqualTo(aroundId);
-		example.setOrderByClause("rank_num desc");
+		example.setOrderByClause("rank_num asc");
 		List<JumpParticipant> jumpParticipants = participantMapper.selectByExample(example);
 		return jumpParticipants;
 	}
@@ -254,5 +271,10 @@ public class ParticipantService {
 		public int compare(JumpParticipant o1, JumpParticipant o2) {
 			return o2.getPoint() - o1.getPoint();
 		}
+	}
+
+	public static void main(String[] args) {
+		double x = 3.8;
+		System.out.println((int)x);
 	}
 }

@@ -24,10 +24,10 @@ public class AroundController {
 
 	@RequestMapping("/create")
 	public WebMessage save(@RequestParam String name,
-						   @RequestParam int mn,
-						   @RequestParam String mp) {
+						   @RequestParam int mp,
+						   @RequestParam String mm) {
 
-		aroundService.saveAround(name, mn, mp);
+		aroundService.saveAround(name, mp, mm);
 
 		return WebMessage.DEFAULT;
 	}
