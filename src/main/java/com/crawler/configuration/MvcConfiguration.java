@@ -15,18 +15,23 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 		return new SignInceptor();
 	}
 
+	@Bean
+	public ApiInceptor apiInceptor() {
+		return new ApiInceptor();
+	}
+
 	/**
 	 * 配置拦截器
 	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		//校验用户登录
-		registry.addInterceptor(new ApiInceptor())
+		registry.addInterceptor(apiInceptor())
 				.addPathPatterns("/api/**");
 
 		//验证签名
-//		registry.addInterceptor(signInceptor())
-//				.addPathPatterns("/api/p/report"); //客户数据上报
+		registry.addInterceptor(signInceptor())
+				.addPathPatterns("/api/p/report"); //客户数据上报
 	}
 
 }

@@ -6,6 +6,8 @@ import java.util.Date;
 public class JumpSettleDetail {
     private Long jumpSettleDetailId;
 
+    private Long settleId;
+
     private String userId;
 
     private String participantName;
@@ -24,6 +26,14 @@ public class JumpSettleDetail {
 
     public void setJumpSettleDetailId(Long jumpSettleDetailId) {
         this.jumpSettleDetailId = jumpSettleDetailId;
+    }
+
+    public Long getSettleId() {
+        return settleId;
+    }
+
+    public void setSettleId(Long settleId) {
+        this.settleId = settleId;
     }
 
     public String getUserId() {

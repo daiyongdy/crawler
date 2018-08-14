@@ -21,8 +21,10 @@
         <!--<table tableName="jump_around" domainObjectName="JumpAround">-->
             <!--&lt;!&ndash;<generatedKey column="around_id" sqlStatement="SELECT LAST_INSERT_ID()"/>&ndash;&gt;-->
         <!--</table>-->
-        <table tableName="jump_participant" domainObjectName="JumpParticipant"></table>
-        <!--<table tableName="jump_settle" domainObjectName="JumpSettle"></table>-->
+        <!--<table tableName="jump_participant" domainObjectName="JumpParticipant"></table>-->
+        <table tableName="jump_settle" domainObjectName="JumpSettle">
+            <generatedKey column="settle_id" sqlStatement="SELECT LAST_INSERT_ID()"/>
+        </table>
         <table tableName="jump_settle_detail" domainObjectName="JumpSettleDetail"></table>
 
     </context>

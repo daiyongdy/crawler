@@ -89,7 +89,7 @@ public class AroundService {
 		around.setCurrentParticipantsNum(1);
 		around.setMoney(minMoneyDecimal);
 		around.setTotalAmout(minMoneyDecimal);
-		around.setStatus(1); //状态： 0：新建   1：进行中 2： 已结束 3：已结算
+		around.setStatus(1); //状态： 0：新建   1：进行中 2： 已结束 3：已生成结算单
 		around.setCreaterId(user.getUserId());
 		around.setCreaterName(user.getUserName());
 		around.setCreateTime(new Date());

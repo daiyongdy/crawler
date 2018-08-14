@@ -1,8 +1,11 @@
 package com.crawler.interceptor;
 
+import com.crawler.util.CookieUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,8 +15,17 @@ public class ApiInceptor implements HandlerInterceptor {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+		String token = null;
+
 		//判断是否登录
-//		String token = request.getParameter(TOKEN_NAME);
+		Cookie cookie = CookieUtil.getCookie(request, TOKEN_NAME);
+		token = cookie.getValue();
+
+		if (StringUtils.isNotBlank(token)) {
+			token = request.getParameter(TOKEN_NAME);
+		}
+
 //		if (!StringUtils.isNotBlank(token)) {
 //			throw BizException.NOT_LOGIN;
 //		}

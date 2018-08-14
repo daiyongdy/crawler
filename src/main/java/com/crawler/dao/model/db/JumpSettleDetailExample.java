@@ -166,6 +166,66 @@ public class JumpSettleDetailExample {
             return (Criteria) this;
         }
 
+        public Criteria andSettleIdIsNull() {
+            addCriterion("settle_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettleIdIsNotNull() {
+            addCriterion("settle_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettleIdEqualTo(Long value) {
+            addCriterion("settle_id =", value, "settleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettleIdNotEqualTo(Long value) {
+            addCriterion("settle_id <>", value, "settleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettleIdGreaterThan(Long value) {
+            addCriterion("settle_id >", value, "settleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettleIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("settle_id >=", value, "settleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettleIdLessThan(Long value) {
+            addCriterion("settle_id <", value, "settleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettleIdLessThanOrEqualTo(Long value) {
+            addCriterion("settle_id <=", value, "settleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettleIdIn(List<Long> values) {
+            addCriterion("settle_id in", values, "settleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettleIdNotIn(List<Long> values) {
+            addCriterion("settle_id not in", values, "settleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettleIdBetween(Long value1, Long value2) {
+            addCriterion("settle_id between", value1, value2, "settleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettleIdNotBetween(Long value1, Long value2) {
+            addCriterion("settle_id not between", value1, value2, "settleId");
+            return (Criteria) this;
+        }
+
         public Criteria andUserIdIsNull() {
             addCriterion("user_id is null");
             return (Criteria) this;
