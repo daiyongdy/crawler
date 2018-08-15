@@ -1,6 +1,5 @@
 package com.crawler.dao.model.db;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -176,173 +175,63 @@ public class JumpSettleExample {
             return (Criteria) this;
         }
 
-        public Criteria andAroundIdEqualTo(Long value) {
+        public Criteria andAroundIdEqualTo(String value) {
             addCriterion("around_id =", value, "aroundId");
             return (Criteria) this;
         }
 
-        public Criteria andAroundIdNotEqualTo(Long value) {
+        public Criteria andAroundIdNotEqualTo(String value) {
             addCriterion("around_id <>", value, "aroundId");
             return (Criteria) this;
         }
 
-        public Criteria andAroundIdGreaterThan(Long value) {
+        public Criteria andAroundIdGreaterThan(String value) {
             addCriterion("around_id >", value, "aroundId");
             return (Criteria) this;
         }
 
-        public Criteria andAroundIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andAroundIdGreaterThanOrEqualTo(String value) {
             addCriterion("around_id >=", value, "aroundId");
             return (Criteria) this;
         }
 
-        public Criteria andAroundIdLessThan(Long value) {
+        public Criteria andAroundIdLessThan(String value) {
             addCriterion("around_id <", value, "aroundId");
             return (Criteria) this;
         }
 
-        public Criteria andAroundIdLessThanOrEqualTo(Long value) {
+        public Criteria andAroundIdLessThanOrEqualTo(String value) {
             addCriterion("around_id <=", value, "aroundId");
             return (Criteria) this;
         }
 
-        public Criteria andAroundIdIn(List<Long> values) {
+        public Criteria andAroundIdLike(String value) {
+            addCriterion("around_id like", value, "aroundId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdNotLike(String value) {
+            addCriterion("around_id not like", value, "aroundId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdIn(List<String> values) {
             addCriterion("around_id in", values, "aroundId");
             return (Criteria) this;
         }
 
-        public Criteria andAroundIdNotIn(List<Long> values) {
+        public Criteria andAroundIdNotIn(List<String> values) {
             addCriterion("around_id not in", values, "aroundId");
             return (Criteria) this;
         }
 
-        public Criteria andAroundIdBetween(Long value1, Long value2) {
+        public Criteria andAroundIdBetween(String value1, String value2) {
             addCriterion("around_id between", value1, value2, "aroundId");
             return (Criteria) this;
         }
 
-        public Criteria andAroundIdNotBetween(Long value1, Long value2) {
+        public Criteria andAroundIdNotBetween(String value1, String value2) {
             addCriterion("around_id not between", value1, value2, "aroundId");
-            return (Criteria) this;
-        }
-
-        public Criteria andWraterIsNull() {
-            addCriterion("wrater is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andWraterIsNotNull() {
-            addCriterion("wrater is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andWraterEqualTo(BigDecimal value) {
-            addCriterion("wrater =", value, "wrater");
-            return (Criteria) this;
-        }
-
-        public Criteria andWraterNotEqualTo(BigDecimal value) {
-            addCriterion("wrater <>", value, "wrater");
-            return (Criteria) this;
-        }
-
-        public Criteria andWraterGreaterThan(BigDecimal value) {
-            addCriterion("wrater >", value, "wrater");
-            return (Criteria) this;
-        }
-
-        public Criteria andWraterGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("wrater >=", value, "wrater");
-            return (Criteria) this;
-        }
-
-        public Criteria andWraterLessThan(BigDecimal value) {
-            addCriterion("wrater <", value, "wrater");
-            return (Criteria) this;
-        }
-
-        public Criteria andWraterLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("wrater <=", value, "wrater");
-            return (Criteria) this;
-        }
-
-        public Criteria andWraterIn(List<BigDecimal> values) {
-            addCriterion("wrater in", values, "wrater");
-            return (Criteria) this;
-        }
-
-        public Criteria andWraterNotIn(List<BigDecimal> values) {
-            addCriterion("wrater not in", values, "wrater");
-            return (Criteria) this;
-        }
-
-        public Criteria andWraterBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("wrater between", value1, value2, "wrater");
-            return (Criteria) this;
-        }
-
-        public Criteria andWraterNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("wrater not between", value1, value2, "wrater");
-            return (Criteria) this;
-        }
-
-        public Criteria andWinNumIsNull() {
-            addCriterion("win_num is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andWinNumIsNotNull() {
-            addCriterion("win_num is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andWinNumEqualTo(Integer value) {
-            addCriterion("win_num =", value, "winNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andWinNumNotEqualTo(Integer value) {
-            addCriterion("win_num <>", value, "winNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andWinNumGreaterThan(Integer value) {
-            addCriterion("win_num >", value, "winNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andWinNumGreaterThanOrEqualTo(Integer value) {
-            addCriterion("win_num >=", value, "winNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andWinNumLessThan(Integer value) {
-            addCriterion("win_num <", value, "winNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andWinNumLessThanOrEqualTo(Integer value) {
-            addCriterion("win_num <=", value, "winNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andWinNumIn(List<Integer> values) {
-            addCriterion("win_num in", values, "winNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andWinNumNotIn(List<Integer> values) {
-            addCriterion("win_num not in", values, "winNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andWinNumBetween(Integer value1, Integer value2) {
-            addCriterion("win_num between", value1, value2, "winNum");
-            return (Criteria) this;
-        }
-
-        public Criteria andWinNumNotBetween(Integer value1, Integer value2) {
-            addCriterion("win_num not between", value1, value2, "winNum");
             return (Criteria) this;
         }
 

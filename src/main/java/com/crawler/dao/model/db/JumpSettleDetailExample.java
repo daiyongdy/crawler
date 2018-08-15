@@ -226,6 +226,76 @@ public class JumpSettleDetailExample {
             return (Criteria) this;
         }
 
+        public Criteria andAroundIdIsNull() {
+            addCriterion("around_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdIsNotNull() {
+            addCriterion("around_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdEqualTo(String value) {
+            addCriterion("around_id =", value, "aroundId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdNotEqualTo(String value) {
+            addCriterion("around_id <>", value, "aroundId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdGreaterThan(String value) {
+            addCriterion("around_id >", value, "aroundId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdGreaterThanOrEqualTo(String value) {
+            addCriterion("around_id >=", value, "aroundId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdLessThan(String value) {
+            addCriterion("around_id <", value, "aroundId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdLessThanOrEqualTo(String value) {
+            addCriterion("around_id <=", value, "aroundId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdLike(String value) {
+            addCriterion("around_id like", value, "aroundId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdNotLike(String value) {
+            addCriterion("around_id not like", value, "aroundId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdIn(List<String> values) {
+            addCriterion("around_id in", values, "aroundId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdNotIn(List<String> values) {
+            addCriterion("around_id not in", values, "aroundId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdBetween(String value1, String value2) {
+            addCriterion("around_id between", value1, value2, "aroundId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAroundIdNotBetween(String value1, String value2) {
+            addCriterion("around_id not between", value1, value2, "aroundId");
+            return (Criteria) this;
+        }
+
         public Criteria andUserIdIsNull() {
             addCriterion("user_id is null");
             return (Criteria) this;

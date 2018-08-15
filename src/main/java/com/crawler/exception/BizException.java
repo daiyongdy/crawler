@@ -37,9 +37,11 @@ public class BizException extends RuntimeException {
 	public static final BizException USER_AROUND_NOT_EXISTS = new BizException("50004", "您没有未完成回合");
 	public static final BizException AROUND_IS_OVER = new BizException("50005", "您已经完成此回合游戏");
 	public static final BizException USER_IS_IN_AROUND = new BizException("50006", "您已经参与该回合");
-	public static final BizException HAS_UNFINISHED_AROUND = new BizException("50007", "您有未完成回合, 不能加入游戏");
+	public static final BizException HAS_UNFINISHED_AROUND = new BizException("50007", "您有未完成回合, 不能进行此操作");
 	public static final BizException REJECT = new BizException("50008", "请求拒绝");
 	public static final BizException MIN_MONEY_EXEED = new BizException("50009", "金额超出允许范围");
 	public static final BizException NAME_EXISTS = new BizException("50010", "回合名称已存在");
+	public static final BizException GET_USER_INFO_FAIL = new BizException("50011", "获取用户信息失败");
+	public static final BizException DEDUCT_BALANCE_FAIL = new BizException("50012", "扣减用户余额失败");
 
 }

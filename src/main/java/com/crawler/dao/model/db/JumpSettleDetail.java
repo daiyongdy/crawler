@@ -8,6 +8,8 @@ public class JumpSettleDetail {
 
     private Long settleId;
 
+    private String aroundId;
+
     private String userId;
 
     private String participantName;
@@ -34,6 +36,14 @@ public class JumpSettleDetail {
 
     public void setSettleId(Long settleId) {
         this.settleId = settleId;
+    }
+
+    public String getAroundId() {
+        return aroundId;
+    }
+
+    public void setAroundId(String aroundId) {
+        this.aroundId = aroundId == null ? null : aroundId.trim();
     }
 
     public String getUserId() {

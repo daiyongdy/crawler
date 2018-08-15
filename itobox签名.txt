@@ -1,0 +1,25 @@
+签名规则：所有参数按字典序排序；按照顺序组合成字符串，如key1=value1|key2=value2(value为空也要参与排序)，最后在字符串后加上密钥进行md5生成sign签名， 签名字段不参与签名
+示例：xxx/api/?b=v1&c=v2&a=&sign=xxxxxxxxx
+     签名顺序 1)按字典序组成字符串 a=|b=v1|c=v2|
+             2)md5生成签名 md5("a=|b=v1|c=v2|" + secret) 
+
+扣除余额接口参数
+	1. userId
+	2. aid (回合id)
+	3. amount (扣减金额)
+	4. timestamp (时间戳 精确到毫秒)    
+	返回值：
+		true / false
+增加余额接口参数
+	1. userId
+	2. aid (回合id)
+	3. amount (扣减金额)
+	4. timestamp (时间戳 精确到毫秒) 
+	返回值：
+		true / false
+
+根据token获取用户信息接口
+	1. token
+	2. timestamp (时间戳 精确到毫秒) 
+    返回值：
+      需要返回用户id、用户name、用户余额

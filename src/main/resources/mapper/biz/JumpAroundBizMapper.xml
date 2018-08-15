@@ -27,5 +27,12 @@
     from jump_around where around_id = #{value}
   </select>
 
+  <select id="getFinishedAround" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    from jump_around where status = 2
+    order by create_time asc limit 30
+  </select>
+
 
 </mapper>

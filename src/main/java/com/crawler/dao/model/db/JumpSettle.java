@@ -1,16 +1,11 @@
 package com.crawler.dao.model.db;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class JumpSettle {
     private Long settleId;
 
-    private Long aroundId;
-
-    private BigDecimal wrater;
-
-    private Integer winNum;
+    private String aroundId;
 
     private Boolean hasSettleFinished;
 
@@ -26,28 +21,12 @@ public class JumpSettle {
         this.settleId = settleId;
     }
 
-    public Long getAroundId() {
+    public String getAroundId() {
         return aroundId;
     }
 
-    public void setAroundId(Long aroundId) {
-        this.aroundId = aroundId;
-    }
-
-    public BigDecimal getWrater() {
-        return wrater;
-    }
-
-    public void setWrater(BigDecimal wrater) {
-        this.wrater = wrater;
-    }
-
-    public Integer getWinNum() {
-        return winNum;
-    }
-
-    public void setWinNum(Integer winNum) {
-        this.winNum = winNum;
+    public void setAroundId(String aroundId) {
+        this.aroundId = aroundId == null ? null : aroundId.trim();
     }
 
     public Boolean getHasSettleFinished() {

@@ -147,7 +147,7 @@ public class ParticipantService {
 			}
 			//回合结束
 			if (isOver) {
-				around.setStatus(3);
+				around.setStatus(2);
 				around.setUpdateTime(new Date());
 				aroundMapper.updateByPrimaryKeySelective(around);
 

@@ -30,8 +30,8 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
 				.addPathPatterns("/api/**");
 
 		//验证签名
-		registry.addInterceptor(signInceptor())
-				.addPathPatterns("/api/p/report"); //客户数据上报
+//		registry.addInterceptor(signInceptor())
+//				.addPathPatterns("/api/p/report"); //客户数据上报
 	}
 
 }

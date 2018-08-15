@@ -1,20 +1,24 @@
 package com.crawler.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.crawler.dao.mapper.biz.JumpAroundBizMapper;
 import com.crawler.dao.mapper.db.JumpAroundMapper;
 import com.crawler.dao.mapper.db.JumpParticipantMapper;
-import com.crawler.dao.model.db.JumpAround;
-import com.crawler.dao.model.db.JumpAroundExample;
-import com.crawler.dao.model.db.JumpParticipant;
+import com.crawler.dao.mapper.db.JumpSettleDetailMapper;
+import com.crawler.dao.mapper.db.JumpSettleMapper;
+import com.crawler.dao.model.db.*;
 import com.crawler.exception.BizException;
 import com.crawler.model.AroundInfoDTO;
 import com.crawler.model.CheckDTO;
 import com.crawler.model.WebUserDTO;
 import com.crawler.model.WebUserHolder;
 import com.crawler.util.DeviceUtil;
+import com.crawler.util.HttpClientUtil;
+import com.crawler.util.SignUtils;
 import com.crawler.util.UUIDGenerator;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,8 +30,10 @@ import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by daiyong on 2018/8/11.
@@ -38,6 +44,7 @@ import java.util.List;
 public class AroundService {
 
 	private static final Logger LOG = LogManager.getLogger("sysLog");
+	private static final Logger generateSettleLOG = LogManager.getLogger("generateSettle");
 
 	@Autowired
 	private JumpAroundMapper aroundMapper;
@@ -48,11 +55,20 @@ public class AroundService {
 	@Autowired
 	private JumpParticipantMapper participantMapper;
 
+	@Autowired
+	private ParticipantService participantService;
+
+	@Autowired
+	private JumpSettleMapper settleMapper;
+
+	@Autowired
+	private JumpSettleDetailMapper settleDetailMapper;
+
 	@Value("${api.user.balance.deduct}")
 	private String API_USER_BALANCE_DEDUCT;
 
-	@Autowired
-	private ParticipantService participantService;
+	@Value("${itobox.secret}")
+	private String ITOBOX_SECRET;
 
 
 	/**
@@ -79,6 +95,11 @@ public class AroundService {
 		boolean nameExists = isNameExists(name);
 		if (nameExists) {
 			throw BizException.NAME_EXISTS;
+		}
+
+		boolean hasUnFinishedAround = participantService.hasUnFinishedAround(user.getUserId());
+		if (hasUnFinishedAround) {
+			throw BizException.HAS_UNFINISHED_AROUND;
 		}
 
 		//创建回合
@@ -110,7 +131,27 @@ public class AroundService {
 		participant.setUpdateTime(null);
 		participantMapper.insertSelective(participant);
 
-		//FDY 2018/8/11 下午4:48 扣减余额
+		Map<String, Object> params = Maps.newHashMap();
+		params.put("userId", user.getUserId());
+		params.put("aid", around.getAroundId());
+		params.put("amount", around.getMoney().toString());
+		params.put("timestamp", String.valueOf(System.currentTimeMillis()));
+		params.put("sign", SignUtils.sign(params, ITOBOX_SECRET));
+		try {
+			String result = HttpClientUtil.httpGetRequest(API_USER_BALANCE_DEDUCT, params, 10000, 10000);
+			LOG.info("扣减用户余额, params:{}, result:{}", JSON.toJSONString(params), result);
+
+			JSONObject resultObject = JSON.parseObject(result);
+			if (resultObject.getIntValue("RET") == 1) {
+				LOG.info("扣减用户余额成功, params:{}", JSON.toJSONString(params));
+			} else {
+				LOG.error("调用itobox扣减余额接口失败, params:{}", JSON.toJSONString(params));
+				throw BizException.DEDUCT_BALANCE_FAIL;
+			}
+		} catch (URISyntaxException e) {
+			LOG.error("调用itobox扣减余额接口异常, params:{}", JSON.toJSONString(params), e);
+			throw BizException.DEDUCT_BALANCE_FAIL;
+		}
 		LOG.info("创建回合成功, userId:{}, userName:{}, around:{}", user.getUserId(), user.getUserName(), JSON.toJSONString(around));
 
 	}
@@ -241,5 +282,88 @@ public class AroundService {
 		aroundInfoDTO.setParticipants(ps);
 
 		return aroundInfoDTO;
+	}
+
+	/**
+	 * 生成结算单
+	 * @param around
+	 */
+	public void generateSettle(JumpAround around) {
+
+		JumpSettle settle = new JumpSettle();
+		settle.setAroundId(around.getAroundId());
+		settle.setHasSettleFinished(false);
+		settle.setCreateTime(new Date());
+		settleMapper.insertSelective(settle);
+
+		List<JumpSettleDetail> settleDetails = Lists.newArrayList();
+
+		List<JumpParticipant> participants = participantService.getParticipantsOrderByRank(around.getAroundId());
+		int size = participants.size();
+		if (size <= 20) {
+			JumpParticipant participant = participants.get(0);
+			JumpSettleDetail settleDetail = new JumpSettleDetail();
+			settleDetail.setSettleId(settle.getSettleId());
+			settleDetail.setUserId(participant.getUserId());
+			settleDetail.setParticipantName(participant.getParticipantName());
+			settleDetail.setAroundId(around.getAroundId());
+			BigDecimal prize = around.getTotalAmout().multiply(new BigDecimal(0.9));
+			BigDecimal prizeFinal = prize.setScale(4, BigDecimal.ROUND_DOWN);
+			settleDetail.setPrize(prizeFinal);
+			settleDetail.setHasSettleFinished(false);
+			settleDetail.setCreateTime(new Date());
+			settleDetails.add(settleDetail);
+		} else {
+			BigDecimal plus = around.getTotalAmout().subtract(around.getTotalAmout().multiply(new BigDecimal("0.1")));
+			int winnerNum = 0;
+			for (JumpParticipant participant : participants) {
+				if (participant.getIsWin()) {
+					winnerNum++;
+				}
+			}
+			for (JumpParticipant participant : participants) {
+				JumpSettleDetail settleDetail = new JumpSettleDetail();
+				settleDetail.setSettleId(settle.getSettleId());
+				settleDetail.setUserId(participant.getUserId());
+				settleDetail.setParticipantName(participant.getParticipantName());
+				settleDetail.setAroundId(around.getAroundId());
+				//冠军
+				if (participant.getRankNum() == 1) {
+					BigDecimal prize = plus.multiply(new BigDecimal("0.5"));
+					BigDecimal prizeFinal = prize.setScale(4,BigDecimal.ROUND_DOWN);
+					settleDetail.setPrize(prizeFinal);
+				} else {
+					BigDecimal prize = plus.multiply(new BigDecimal("0.5"));
+					BigDecimal prizeFinal = prize.divide(new BigDecimal(winnerNum - 1), 4, BigDecimal.ROUND_DOWN);
+					settleDetail.setPrize(prizeFinal);
+				}
+				settleDetail.setHasSettleFinished(false);
+				settleDetail.setCreateTime(new Date());
+				settleDetails.add(settleDetail);
+			}
+		}
+
+		around.setStatus(3);
+		around.setUpdateTime(new Date());
+		aroundMapper.updateByPrimaryKeySelective(around);
+
+		for (JumpSettleDetail settleDetail : settleDetails) {
+			settleDetailMapper.insertSelective(settleDetail);
+		}
+
+		generateSettleLOG.info("回合生成结算单结束 aroundId:{}, aroundName:{}, winnerSize:{}",
+				around.getAroundId(), around.getAroundName(), settleDetails.size());
+
+	}
+
+	public static void main(String[] args) {
+		BigDecimal decimal = new BigDecimal("1.12345");
+		System.out.println(decimal);
+		BigDecimal setScale = decimal.setScale(3,BigDecimal.ROUND_HALF_DOWN);
+		System.out.println(setScale);
+	}
+
+	public List<JumpAround> getFinishedAround() {
+		return aroundBizMapper.getFinishedAround();
 	}
 }

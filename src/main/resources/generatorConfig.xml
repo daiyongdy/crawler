@@ -25,7 +25,7 @@
         <table tableName="jump_settle" domainObjectName="JumpSettle">
             <generatedKey column="settle_id" sqlStatement="SELECT LAST_INSERT_ID()"/>
         </table>
-        <table tableName="jump_settle_detail" domainObjectName="JumpSettleDetail"></table>
+        <!--<table tableName="jump_settle_detail" domainObjectName="JumpSettleDetail"></table>-->
 
     </context>
 </generatorConfiguration>
