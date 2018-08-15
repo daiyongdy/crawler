@@ -16,6 +16,8 @@ public class JumpSettleDetail {
 
     private BigDecimal prize;
 
+    private Integer type;
+
     private Boolean hasSettleFinished;
 
     private Date createTime;
@@ -68,6 +70,14 @@ public class JumpSettleDetail {
 
     public void setPrize(BigDecimal prize) {
         this.prize = prize;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public Boolean getHasSettleFinished() {

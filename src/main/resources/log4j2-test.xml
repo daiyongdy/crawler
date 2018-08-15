@@ -3,10 +3,12 @@
                packages="com.coohua.mall">
 
     <Properties>
-        <Property name="rootPath">/data/logs/crawler</Property>
+        <Property name="rootPath">/data/logs/jump</Property>
         <Property name="sysLogFilePath">${rootPath}/sys.log</Property>
         <Property name="errorLogFilePath">${rootPath}/error.log</Property>
-        <Property name="reportLogFilePath">${rootPath}/report.log</Property>
+        <Property name="generateSettleLogFilePath">${rootPath}/generateSettle.log</Property>
+        <Property name="settleLogFilePath">${rootPath}/settle.log</Property>
+        <Property name="itoboxLogFilePath">${rootPath}/itobox.log</Property>
         <Property name="debug">debug</Property>
         <Property name="isBufferedIO">true</Property>
         <Property name="isImmediateFlush">true</Property>
@@ -70,6 +72,57 @@
             <AppenderRef ref="errorLogAppender"></AppenderRef>
         </Async>
 
+        <RollingRandomAccessFile name="generateSettleLogAppender"
+                                 fileName="${generateSettleLogFilePath}" filePattern="${generateSettleLogFilePath}.%d{yyyyMMdd}.%i.log"
+                                 immediateFlush="${isImmediateFlush}" ignoreExceptions="${isIgnoreExceptions}"
+                                 bufferSize="${bufferSize}">
+            <PatternLayout>
+                <Pattern>%d[%p]%C{1}.%M(%L)|%m%n</Pattern>
+                <charset>${encodingType}</charset>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB" />
+            </Policies>
+        </RollingRandomAccessFile>
+        <Async name="asyncGenerateSettleLogAppender">
+            <AppenderRef ref="generateSettleLogAppender"></AppenderRef>
+        </Async>
+
+        <RollingRandomAccessFile name="settleLogAppender"
+                                 fileName="${settleLogFilePath}" filePattern="${settleLogFilePath}.%d{yyyyMMdd}.%i.log"
+                                 immediateFlush="${isImmediateFlush}" ignoreExceptions="${isIgnoreExceptions}"
+                                 bufferSize="${bufferSize}">
+            <PatternLayout>
+                <Pattern>%d[%p]%C{1}.%M(%L)|%m%n</Pattern>
+                <charset>${encodingType}</charset>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB" />
+            </Policies>
+        </RollingRandomAccessFile>
+        <Async name="asyncSettleLogAppender">
+            <AppenderRef ref="settleLogAppender"></AppenderRef>
+        </Async>
+
+        <RollingRandomAccessFile name="itoboxLogAppender"
+                                 fileName="${itoboxLogFilePath}" filePattern="${itoboxLogFilePath}.%d{yyyyMMdd}.%i.log"
+                                 immediateFlush="${isImmediateFlush}" ignoreExceptions="${isIgnoreExceptions}"
+                                 bufferSize="${bufferSize}">
+            <PatternLayout>
+                <Pattern>%d[%p]%C{1}.%M(%L)|%m%n</Pattern>
+                <charset>${encodingType}</charset>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB" />
+            </Policies>
+        </RollingRandomAccessFile>
+        <Async name="asyncItoboxLogAppender">
+            <AppenderRef ref="itoboxLogAppender"></AppenderRef>
+        </Async>
+
 
 
     </Appenders>
@@ -84,8 +137,14 @@
         <Logger name="errorLog" level="debug" additivity="false">
             <AppenderRef ref="errorLogAppender"></AppenderRef>
         </Logger>
-        <Logger name="reportLog" level="debug" additivity="false">
-            <AppenderRef ref="reportLogAppender"></AppenderRef>
+        <Logger name="generateSettle" level="debug" additivity="false">
+            <AppenderRef ref="generateSettleLogAppender"></AppenderRef>
+        </Logger>
+        <Logger name="settle" level="debug" additivity="false">
+            <AppenderRef ref="settleLogAppender"></AppenderRef>
+        </Logger>
+        <Logger name="itoboxLog" level="debug" additivity="false">
+            <AppenderRef ref="itoboxLogAppender"></AppenderRef>
         </Logger>
         <logger name="log4j.logger.noModule" level="fatal" additivity="false">
             <appender-ref ref="STDOUT"/>

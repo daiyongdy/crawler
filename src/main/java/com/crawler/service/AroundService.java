@@ -310,6 +310,7 @@ public class AroundService {
 			BigDecimal prize = around.getTotalAmout().multiply(new BigDecimal(0.9));
 			BigDecimal prizeFinal = prize.setScale(4, BigDecimal.ROUND_DOWN);
 			settleDetail.setPrize(prizeFinal);
+			settleDetail.setType(1);
 			settleDetail.setHasSettleFinished(false);
 			settleDetail.setCreateTime(new Date());
 			settleDetails.add(settleDetail);
@@ -337,18 +338,32 @@ public class AroundService {
 					BigDecimal prizeFinal = prize.divide(new BigDecimal(winnerNum - 1), 4, BigDecimal.ROUND_DOWN);
 					settleDetail.setPrize(prizeFinal);
 				}
+				settleDetail.setType(1);
 				settleDetail.setHasSettleFinished(false);
 				settleDetail.setCreateTime(new Date());
 				settleDetails.add(settleDetail);
 			}
 		}
 
+		JumpSettleDetail settleDetail = new JumpSettleDetail();
+		settleDetail.setSettleId(settle.getSettleId());
+		settleDetail.setUserId(around.getCreaterId());
+		settleDetail.setParticipantName(around.getCreaterName());
+		settleDetail.setAroundId(around.getAroundId());
+		BigDecimal prize = around.getTotalAmout().multiply(new BigDecimal("0.08"));
+		BigDecimal prizeFinal = prize.setScale(4,BigDecimal.ROUND_DOWN);
+		settleDetail.setPrize(prizeFinal);
+		settleDetail.setType(2);
+		settleDetail.setHasSettleFinished(false);
+		settleDetail.setCreateTime(new Date());
+		settleDetails.add(settleDetail);
+
 		around.setStatus(3);
 		around.setUpdateTime(new Date());
 		aroundMapper.updateByPrimaryKeySelective(around);
 
-		for (JumpSettleDetail settleDetail : settleDetails) {
-			settleDetailMapper.insertSelective(settleDetail);
+		for (JumpSettleDetail jumpSettleDetail : settleDetails) {
+			settleDetailMapper.insertSelective(jumpSettleDetail);
 		}
 
 		generateSettleLOG.info("回合生成结算单结束 aroundId:{}, aroundName:{}, winnerSize:{}",

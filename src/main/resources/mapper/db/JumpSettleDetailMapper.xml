@@ -8,6 +8,7 @@
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="participant_name" property="participantName" jdbcType="VARCHAR" />
     <result column="prize" property="prize" jdbcType="DECIMAL" />
+    <result column="type" property="type" jdbcType="INTEGER" />
     <result column="has_settle_finished" property="hasSettleFinished" jdbcType="BIT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -71,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    jump_settle_detail_id, settle_id, around_id, user_id, participant_name, prize, has_settle_finished, 
-    create_time, update_time
+    jump_settle_detail_id, settle_id, around_id, user_id, participant_name, prize, type, 
+    has_settle_finished, create_time, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.crawler.dao.model.db.JumpSettleDetailExample" >
     select
@@ -107,12 +108,12 @@
   <insert id="insert" parameterType="com.crawler.dao.model.db.JumpSettleDetail" >
     insert into jump_settle_detail (jump_settle_detail_id, settle_id, around_id, 
       user_id, participant_name, prize, 
-      has_settle_finished, create_time, update_time
-      )
+      type, has_settle_finished, create_time, 
+      update_time)
     values (#{jumpSettleDetailId,jdbcType=BIGINT}, #{settleId,jdbcType=BIGINT}, #{aroundId,jdbcType=VARCHAR}, 
       #{userId,jdbcType=VARCHAR}, #{participantName,jdbcType=VARCHAR}, #{prize,jdbcType=DECIMAL}, 
-      #{hasSettleFinished,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{type,jdbcType=INTEGER}, #{hasSettleFinished,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.crawler.dao.model.db.JumpSettleDetail" >
     insert into jump_settle_detail
@@ -134,6 +135,9 @@
       </if>
       <if test="prize != null" >
         prize,
+      </if>
+      <if test="type != null" >
+        type,
       </if>
       <if test="hasSettleFinished != null" >
         has_settle_finished,
@@ -163,6 +167,9 @@
       </if>
       <if test="prize != null" >
         #{prize,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
       </if>
       <if test="hasSettleFinished != null" >
         #{hasSettleFinished,jdbcType=BIT},
@@ -202,6 +209,9 @@
       <if test="record.prize != null" >
         prize = #{record.prize,jdbcType=DECIMAL},
       </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
       <if test="record.hasSettleFinished != null" >
         has_settle_finished = #{record.hasSettleFinished,jdbcType=BIT},
       </if>
@@ -224,6 +234,7 @@
       user_id = #{record.userId,jdbcType=VARCHAR},
       participant_name = #{record.participantName,jdbcType=VARCHAR},
       prize = #{record.prize,jdbcType=DECIMAL},
+      type = #{record.type,jdbcType=INTEGER},
       has_settle_finished = #{record.hasSettleFinished,jdbcType=BIT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
@@ -249,6 +260,9 @@
       <if test="prize != null" >
         prize = #{prize,jdbcType=DECIMAL},
       </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
       <if test="hasSettleFinished != null" >
         has_settle_finished = #{hasSettleFinished,jdbcType=BIT},
       </if>
@@ -268,6 +282,7 @@
       user_id = #{userId,jdbcType=VARCHAR},
       participant_name = #{participantName,jdbcType=VARCHAR},
       prize = #{prize,jdbcType=DECIMAL},
+      type = #{type,jdbcType=INTEGER},
       has_settle_finished = #{hasSettleFinished,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}

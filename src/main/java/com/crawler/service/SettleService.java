@@ -74,6 +74,7 @@ public class SettleService {
 				params.put("aid", settle.getAroundId());
 				params.put("amount", settleDetail.getPrize().toString());
 				params.put("timestamp", String.valueOf(System.currentTimeMillis()));
+				params.put("type", settleDetail.getType());
 				params.put("sign", SignUtils.sign(params, ITOBOX_SECRET));
 				String result = HttpClientUtil.httpGetRequest(API_USER_BALANCE_ADD, params, 10000, 10000);
 				LOG.info("itobox 用户派奖, params:{}, result:{}", JSON.toJSONString(params), result);
