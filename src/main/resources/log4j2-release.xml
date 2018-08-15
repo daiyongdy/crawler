@@ -5,7 +5,10 @@
     <Properties>
         <Property name="rootPath">/data/logs/crawler</Property>
         <Property name="sysLogFilePath">${rootPath}/sys.log</Property>
-        <Property name="cronLogFilePath">${rootPath}/cron.log</Property>
+        <Property name="errorLogFilePath">${rootPath}/error.log</Property>
+        <Property name="generateSettleLogFilePath">${rootPath}/generateSettle.log</Property>
+        <Property name="settleLogFilePath">${rootPath}/settle.log</Property>
+        <Property name="itoboxLogFilePath">${rootPath}/itobox.log</Property>
         <Property name="debug">debug</Property>
         <Property name="isBufferedIO">true</Property>
         <Property name="isImmediateFlush">true</Property>
@@ -15,6 +18,9 @@
     </Properties>
 
     <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d[%p]%C{1}.%M(%L)|%m%n"/>
+        </Console>
         <RollingRandomAccessFile name="sysLogAppender"
                                  fileName="${sysLogFilePath}" filePattern="${sysLogFilePath}.%d{yyyyMMdd}.%i.log"
                                  immediateFlush="${isImmediateFlush}" ignoreExceptions="${isIgnoreExceptions}"
@@ -32,8 +38,8 @@
             <AppenderRef ref="sysLogAppender"></AppenderRef>
         </Async>
 
-        <RollingRandomAccessFile name="cronLogAppender"
-                                 fileName="${cronLogFilePath}" filePattern="${cronLogFilePath}.%d{yyyyMMdd}.%i.log"
+        <RollingRandomAccessFile name="errorLogAppender"
+                                 fileName="${errorLogFilePath}" filePattern="${errorLogFilePath}.%d{yyyyMMdd}.%i.log"
                                  immediateFlush="${isImmediateFlush}" ignoreExceptions="${isIgnoreExceptions}"
                                  bufferSize="${bufferSize}">
             <PatternLayout>
@@ -45,17 +51,80 @@
                 <SizeBasedTriggeringPolicy size="250 MB" />
             </Policies>
         </RollingRandomAccessFile>
-        <Async name="asyncCronLogAppender">
-            <AppenderRef ref="cronLogAppender"></AppenderRef>
+        <Async name="asyncErrorLogAppender">
+            <AppenderRef ref="errorLogAppender"></AppenderRef>
+        </Async>
+
+        <RollingRandomAccessFile name="generateSettleLogAppender"
+                                 fileName="${generateSettleLogFilePath}" filePattern="${generateSettleLogFilePath}.%d{yyyyMMdd}.%i.log"
+                                 immediateFlush="${isImmediateFlush}" ignoreExceptions="${isIgnoreExceptions}"
+                                 bufferSize="${bufferSize}">
+            <PatternLayout>
+                <Pattern>%d[%p]%C{1}.%M(%L)|%m%n</Pattern>
+                <charset>${encodingType}</charset>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB" />
+            </Policies>
+        </RollingRandomAccessFile>
+        <Async name="asyncGenerateSettleLogAppender">
+            <AppenderRef ref="generateSettleLogAppender"></AppenderRef>
+        </Async>
+
+        <RollingRandomAccessFile name="settleLogAppender"
+                                 fileName="${settleLogFilePath}" filePattern="${settleLogFilePath}.%d{yyyyMMdd}.%i.log"
+                                 immediateFlush="${isImmediateFlush}" ignoreExceptions="${isIgnoreExceptions}"
+                                 bufferSize="${bufferSize}">
+            <PatternLayout>
+                <Pattern>%d[%p]%C{1}.%M(%L)|%m%n</Pattern>
+                <charset>${encodingType}</charset>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB" />
+            </Policies>
+        </RollingRandomAccessFile>
+        <Async name="asyncSettleLogAppender">
+            <AppenderRef ref="settleLogAppender"></AppenderRef>
+        </Async>
+
+        <RollingRandomAccessFile name="itoboxLogAppender"
+                                 fileName="${itoboxLogFilePath}" filePattern="${itoboxLogFilePath}.%d{yyyyMMdd}.%i.log"
+                                 immediateFlush="${isImmediateFlush}" ignoreExceptions="${isIgnoreExceptions}"
+                                 bufferSize="${bufferSize}">
+            <PatternLayout>
+                <Pattern>%d[%p]%C{1}.%M(%L)|%m%n</Pattern>
+                <charset>${encodingType}</charset>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB" />
+            </Policies>
+        </RollingRandomAccessFile>
+        <Async name="asyncItoboxLogAppender">
+            <AppenderRef ref="itoboxLogAppender"></AppenderRef>
         </Async>
     </Appenders>
 
     <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="STDOUT"/>
+        </Root>
         <Logger name="sysLog" level="debug" additivity="false">
             <AppenderRef ref="sysLogAppender"></AppenderRef>
         </Logger>
-        <Logger name="asyncLog" level="debug" additivity="false">
-            <AppenderRef ref="cronLogAppender"></AppenderRef>
+        <Logger name="errorLog" level="debug" additivity="false">
+            <AppenderRef ref="errorLogAppender"></AppenderRef>
+        </Logger>
+        <Logger name="generateSettle" level="debug" additivity="false">
+            <AppenderRef ref="generateSettleLogAppender"></AppenderRef>
+        </Logger>
+        <Logger name="settle" level="debug" additivity="false">
+            <AppenderRef ref="settleLogAppender"></AppenderRef>
+        </Logger>
+        <Logger name="itoboxLog" level="debug" additivity="false">
+            <AppenderRef ref="itoboxLogAppender"></AppenderRef>
         </Logger>
     </Loggers>
 </Configuration>

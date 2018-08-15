@@ -38,23 +38,6 @@
             <AppenderRef ref="sysLogAppender"></AppenderRef>
         </Async>
 
-        <RollingRandomAccessFile name="reportLogAppender"
-                                 fileName="${reportLogFilePath}" filePattern="${reportLogFilePath}.%d{yyyyMMdd}.%i.log"
-                                 immediateFlush="${isImmediateFlush}" ignoreExceptions="${isIgnoreExceptions}"
-                                 bufferSize="${bufferSize}">
-            <PatternLayout>
-                <Pattern>%d[%p]%C{1}.%M(%L)|%m%n</Pattern>
-                <charset>${encodingType}</charset>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy />
-                <SizeBasedTriggeringPolicy size="250 MB" />
-            </Policies>
-        </RollingRandomAccessFile>
-        <Async name="asyncReportLogAppender">
-            <AppenderRef ref="reportLogAppender"></AppenderRef>
-        </Async>
-
         <RollingRandomAccessFile name="errorLogAppender"
                                  fileName="${errorLogFilePath}" filePattern="${errorLogFilePath}.%d{yyyyMMdd}.%i.log"
                                  immediateFlush="${isImmediateFlush}" ignoreExceptions="${isIgnoreExceptions}"

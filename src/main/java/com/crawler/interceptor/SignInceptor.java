@@ -6,6 +6,7 @@ import com.crawler.model.WebUserDTO;
 import com.crawler.model.WebUserHolder;
 import com.crawler.util.MD5Utils;
 import com.crawler.util.RequestUtils;
+import com.crawler.util.SignUtils;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -30,24 +31,17 @@ public class SignInceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-		Map<String, String> params = RequestUtils.getParameterMap(request);
+		Map<String, Object> params = RequestUtils.getParameterMap(request);
 
-		if (!StringUtils.isNotBlank(params.get("sign"))) {
+		if (!StringUtils.isNotBlank(String.valueOf(params.get("sign")))) {
 			WebUserDTO user = WebUserHolder.getUser();
 			LOG.error("数据上报没有签名 拒绝请求, userId:{}, userName:{}, params:{}",
 					user.getUserId(), user.getUserName(), JSON.toJSONString(params));
 			throw BizException.REJECT;
 		}
 
-		SortedMap<String, String> sortedParams = new TreeMap<String, String>(params);
-		sortedParams.remove("sign");
-		StringBuilder sb = new StringBuilder();
-		for (String key : sortedParams.keySet()) {
-			String val = sortedParams.get(key);
-			sb.append(key).append("=").append(StringUtils.defaultIfEmpty(val, "")).append("|");
-		}
+		String sourceSign = SignUtils.sign(params, H5_SECRET);
 
-		String sourceSign = MD5Utils.getDigest(sb.append(H5_SECRET).toString());
 		if (!sourceSign.equals(params.get("sign"))) {
 			WebUserDTO user = WebUserHolder.getUser();
 			LOG.error("数据上报签名错误 拒绝请求, userId:{}, userName:{}, params:{}",
