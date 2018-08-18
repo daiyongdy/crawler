@@ -3,7 +3,7 @@
                packages="com.coohua.mall">
 
     <Properties>
-        <Property name="rootPath">/data/logs/crawler</Property>
+        <Property name="rootPath">/data/logs/jump</Property>
         <Property name="sysLogFilePath">${rootPath}/sys.log</Property>
         <Property name="errorLogFilePath">${rootPath}/error.log</Property>
         <Property name="generateSettleLogFilePath">${rootPath}/generateSettle.log</Property>

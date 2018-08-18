@@ -67,6 +67,14 @@ public class SettleService {
 		int sucNum = 0;
 		for (JumpSettleDetail settleDetail : settleDetails) {
 			try {
+
+				if (settleDetail.getHasSettleFinished()) {
+					LOG.info("派奖开始 已经派奖 settleId:{}, settleDetailId:{}, userId:{}, aroundId:{}, prize:{}",
+							settle.getSettleId(), settleDetail.getJumpSettleDetailId(), settleDetail.getUserId(), settle.getAroundId(), settleDetail.getPrize());
+					sucNum++;
+					continue;
+				}
+
 				LOG.info("派奖开始 settleId:{}, settleDetailId:{}, userId:{}, aroundId:{}, prize:{}",
 								settle.getSettleId(), settleDetail.getJumpSettleDetailId(), settleDetail.getUserId(), settle.getAroundId(), settleDetail.getPrize());
 				Map<String, Object> params = Maps.newHashMap();
