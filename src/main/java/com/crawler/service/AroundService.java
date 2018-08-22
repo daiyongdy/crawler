@@ -3,10 +3,7 @@ package com.crawler.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.crawler.dao.mapper.biz.JumpAroundBizMapper;
-import com.crawler.dao.mapper.db.JumpAroundMapper;
-import com.crawler.dao.mapper.db.JumpParticipantMapper;
-import com.crawler.dao.mapper.db.JumpSettleDetailMapper;
-import com.crawler.dao.mapper.db.JumpSettleMapper;
+import com.crawler.dao.mapper.db.*;
 import com.crawler.dao.model.db.*;
 import com.crawler.exception.BizException;
 import com.crawler.model.AroundInfoDTO;
@@ -70,6 +67,12 @@ public class AroundService {
 	@Value("${itobox.secret}")
 	private String ITOBOX_SECRET;
 
+	@Autowired
+	private JumpIdGeneMapper idGeneMapper;
+
+	@Autowired
+	private JumpGameRecordMapper gameRecordMapper;
+
 
 	/**
 	 * 创建回合
@@ -77,7 +80,7 @@ public class AroundService {
 	 * @param minParticipant
 	 * @param minMoney
 	 */
-	public void saveAround(String name, int minParticipant, String minMoney) {
+	public JumpAround saveAround(String name, int minParticipant, String minMoney) {
 
 		WebUserDTO user = WebUserHolder.getUser();
 
@@ -92,13 +95,8 @@ public class AroundService {
 			throw BizException.BALANCE_NOT_ENOUGH;
 		}
 
-		boolean nameExists = isNameExists(name);
-		if (nameExists) {
-			throw BizException.NAME_EXISTS;
-		}
-
-		boolean hasUnFinishedAround = participantService.hasUnFinishedAround(user.getUserId());
-		if (hasUnFinishedAround) {
+		JumpAround unFinishedAround = aroundBizMapper.getUnFinishedAround(user.getUserId());
+		if (unFinishedAround != null) {
 			throw BizException.HAS_UNFINISHED_AROUND;
 		}
 
@@ -115,6 +113,12 @@ public class AroundService {
 		around.setCreaterName(user.getUserName());
 		around.setCreateTime(new Date());
 		around.setUpdateTime(null);
+
+		//回合序列
+		JumpIdGene jumpIdGene = new JumpIdGene();
+		idGeneMapper.insert(jumpIdGene);
+		around.setNo(jumpIdGene.getId());
+
 		aroundMapper.insertSelective(around);
 
 		//添加回合参与人
@@ -139,20 +143,22 @@ public class AroundService {
 		params.put("sign", SignUtils.sign(params, ITOBOX_SECRET));
 		try {
 			String result = HttpClientUtil.httpGetRequest(API_USER_BALANCE_DEDUCT, params, 10000, 10000);
-			LOG.info("扣减用户余额, params:{}, result:{}", JSON.toJSONString(params), result);
+			LOG.info("创建回合扣减用户余额, params:{}, result:{}", JSON.toJSONString(params), result);
 
 			JSONObject resultObject = JSON.parseObject(result);
 			if (resultObject.getIntValue("RET") == 1) {
-				LOG.info("扣减用户余额成功, params:{}", JSON.toJSONString(params));
+				LOG.info("创建回合扣减用户余额成功, params:{}", JSON.toJSONString(params));
 			} else {
-				LOG.error("调用itobox扣减余额接口失败, params:{}", JSON.toJSONString(params));
+				LOG.error("创建回合调用itobox扣减余额接口失败, params:{}", JSON.toJSONString(params));
 				throw BizException.DEDUCT_BALANCE_FAIL;
 			}
 		} catch (URISyntaxException e) {
-			LOG.error("调用itobox扣减余额接口异常, params:{}", JSON.toJSONString(params), e);
+			LOG.error("创建回合调用itobox扣减余额接口异常, params:{}", JSON.toJSONString(params), e);
 			throw BizException.DEDUCT_BALANCE_FAIL;
 		}
 		LOG.info("创建回合成功, userId:{}, userName:{}, around:{}", user.getUserId(), user.getUserName(), JSON.toJSONString(around));
+
+		return around;
 
 	}
 
@@ -200,20 +206,19 @@ public class AroundService {
 		}
 		//点击入口
 		else {
-			String unOverAroundId = participantService.getUnOverAroundId(user.getUserId());
-			if (StringUtils.isNotBlank(unOverAroundId)) {
-				JumpAround around = lockGet(unOverAroundId);
+			JumpAround unFinishedAround = aroundBizMapper.getUnFinishedAround(user.getUserId());
+			if (unFinishedAround != null) {
 				checkDTO.setAroundId(aroundId);
-				int status = around.getStatus();
-				if (status == 3 || status == 4) {
+				int status = unFinishedAround.getStatus();
+				if (status == 2 || status == 3) {
 					checkDTO.setIsAroundOver(true);
 				} else {
 					checkDTO.setIsAroundOver(false);
 				}
-				checkDTO.setAroundId(unOverAroundId);
-				checkDTO.setIsSelfCreate(around.getCreaterId().equals(user.getUserId()));
+				checkDTO.setAroundId(unFinishedAround.getAroundId());
+				checkDTO.setIsSelfCreate(unFinishedAround.getCreaterId().equals(user.getUserId()));
 				checkDTO.setHasBalance(user.getBalance().compareTo(BigDecimal.ZERO) > 0);
-				checkDTO.setIsBalanceEnough(user.getBalance().compareTo(around.getMoney()) > 0);
+				checkDTO.setIsBalanceEnough(user.getBalance().compareTo(unFinishedAround.getMoney()) > 0);
 				checkDTO.setIsInAround(true);
 			}
 			else {
@@ -249,14 +254,21 @@ public class AroundService {
 		aroundInfoDTO.setCurrentParticipantsNum(around.getCurrentParticipantsNum());
 		aroundInfoDTO.setTotalAmout(around.getTotalAmout());
 		int status = around.getStatus();
-		boolean inAround = participantService.isInAround(aroundId, user.getUserId());
+//		boolean inAround = participantService.isInAround(aroundId, user.getUserId());
+		JumpParticipant participant1 = participantService.getParticipant(aroundId, user.getUserId());
 		if (status == 2 || status == 3 ) {
 			aroundInfoDTO.setIsOver(true);
 			aroundInfoDTO.setDesc("已结束");
 		} else {
 			aroundInfoDTO.setIsOver(false);
-			aroundInfoDTO.setDesc(inAround ? "已参与" : "立即参与");
+			boolean joinAround = participant1 != null;
+			boolean finishGame = participant1 != null ? participant1.getIsOver() ? true : false : false;
+//			aroundInfoDTO.setDesc(participant1 != null ? "已参与" : "立即参与");
+			aroundInfoDTO.setDesc((joinAround && finishGame) ? "已参与" : "开始游戏");
 		}
+
+		//是否完成游戏
+		aroundInfoDTO.setIsFinishGame(participant1 != null ? participant1.getIsOver() ? true : false : false);
 
 		List<JumpParticipant> participants;
 		if (status == 2 || status == 3 ) {
@@ -300,7 +312,10 @@ public class AroundService {
 
 		List<JumpParticipant> participants = participantService.getParticipantsOrderByRank(around.getAroundId());
 		int size = participants.size();
-		if (size <= 20) {
+
+		List<JumpGameRecord> gameRecords = Lists.newArrayList();
+
+		if (size <= 10) {
 			JumpParticipant participant = participants.get(0);
 			JumpSettleDetail settleDetail = new JumpSettleDetail();
 			settleDetail.setSettleId(settle.getSettleId());
@@ -314,6 +329,20 @@ public class AroundService {
 			settleDetail.setHasSettleFinished(false);
 			settleDetail.setCreateTime(new Date());
 			settleDetails.add(settleDetail);
+
+			//用户游戏记录
+			for (JumpParticipant jumpParticipant : participants) {
+				JumpGameRecord gameRecord = new JumpGameRecord();
+				gameRecord.setUserId(String.valueOf(jumpParticipant.getParticipantId()));
+				gameRecord.setGameNo(around.getNo());
+				gameRecord.setMoney(around.getMoney());
+				gameRecord.setRankNum(jumpParticipant.getRankNum());
+				gameRecord.setIncome(jumpParticipant.getRankNum() == 1 ? prizeFinal : BigDecimal.ZERO);
+				gameRecord.setCostTime((jumpParticipant.getUpdateTime().getTime() - jumpParticipant.getStartTime().getTime()) / 1000);
+				gameRecord.setCreateTime(new Date());
+				gameRecords.add(gameRecord);
+			}
+
 		} else {
 			BigDecimal plus = around.getTotalAmout().subtract(around.getTotalAmout().multiply(new BigDecimal("0.1")));
 			int winnerNum = 0;
@@ -323,25 +352,42 @@ public class AroundService {
 				}
 			}
 			for (JumpParticipant participant : participants) {
-				JumpSettleDetail settleDetail = new JumpSettleDetail();
-				settleDetail.setSettleId(settle.getSettleId());
-				settleDetail.setUserId(participant.getUserId());
-				settleDetail.setParticipantName(participant.getParticipantName());
-				settleDetail.setAroundId(around.getAroundId());
-				//冠军
-				if (participant.getRankNum() == 1) {
-					BigDecimal prize = plus.multiply(new BigDecimal("0.5"));
-					BigDecimal prizeFinal = prize.setScale(4,BigDecimal.ROUND_DOWN);
-					settleDetail.setPrize(prizeFinal);
+
+				JumpGameRecord gameRecord = new JumpGameRecord();
+				gameRecord.setUserId(String.valueOf(participant.getParticipantId()));
+				gameRecord.setGameNo(around.getNo());
+				gameRecord.setMoney(around.getMoney());
+				gameRecord.setRankNum(participant.getRankNum());
+				gameRecord.setCostTime((participant.getUpdateTime().getTime() - participant.getStartTime().getTime()) / 1000);
+				gameRecord.setCreateTime(new Date());
+
+				if (participant.getIsWin()) {
+					JumpSettleDetail settleDetail = new JumpSettleDetail();
+					settleDetail.setSettleId(settle.getSettleId());
+					settleDetail.setUserId(participant.getUserId());
+					settleDetail.setParticipantName(participant.getParticipantName());
+					settleDetail.setAroundId(around.getAroundId());
+					//冠军
+					if (participant.getRankNum() == 1) {
+						BigDecimal prize = plus.multiply(new BigDecimal("0.5"));
+						BigDecimal prizeFinal = prize.setScale(4,BigDecimal.ROUND_DOWN);
+						settleDetail.setPrize(prizeFinal);
+						gameRecord.setIncome(prizeFinal);
+					} else {
+						BigDecimal prize = plus.multiply(new BigDecimal("0.5"));
+						BigDecimal prizeFinal = prize.divide(new BigDecimal(winnerNum - 1), 4, BigDecimal.ROUND_DOWN);
+						settleDetail.setPrize(prizeFinal);
+						gameRecord.setIncome(prizeFinal);
+					}
+					settleDetail.setType(1);
+					settleDetail.setHasSettleFinished(false);
+					settleDetail.setCreateTime(new Date());
+					settleDetails.add(settleDetail);
 				} else {
-					BigDecimal prize = plus.multiply(new BigDecimal("0.5"));
-					BigDecimal prizeFinal = prize.divide(new BigDecimal(winnerNum - 1), 4, BigDecimal.ROUND_DOWN);
-					settleDetail.setPrize(prizeFinal);
+					gameRecord.setIncome(BigDecimal.ZERO);
 				}
-				settleDetail.setType(1);
-				settleDetail.setHasSettleFinished(false);
-				settleDetail.setCreateTime(new Date());
-				settleDetails.add(settleDetail);
+
+				gameRecords.add(gameRecord);
 			}
 		}
 
@@ -357,6 +403,14 @@ public class AroundService {
 		settleDetail.setHasSettleFinished(false);
 		settleDetail.setCreateTime(new Date());
 		settleDetails.add(settleDetail);
+
+		//添加用户游戏记录
+		for (JumpGameRecord gameRecord : gameRecords) {
+			if (gameRecord.getUserId().equals(settleDetail.getUserId())) {
+				gameRecord.setIncome(gameRecord.getIncome().add(settleDetail.getPrize()));
+			}
+			gameRecordMapper.insertSelective(gameRecord);
+		}
 
 		around.setStatus(3);
 		around.setUpdateTime(new Date());

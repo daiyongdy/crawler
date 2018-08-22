@@ -10,6 +10,7 @@
     <result column="money" property="money" jdbcType="DECIMAL" />
     <result column="total_amout" property="totalAmout" jdbcType="DECIMAL" />
     <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="no" property="no" jdbcType="BIGINT" />
     <result column="creater_id" property="createrId" jdbcType="VARCHAR" />
     <result column="creater_name" property="createrName" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -18,13 +19,13 @@
 
   <sql id="Base_Column_List" >
     around_id, around_name, min_participants_num, current_participants_num, money, total_amout,
-    status, creater_id, creater_name, create_time, update_time
+    status, no, creater_id, creater_name, create_time, update_time
   </sql>
 
   <select id="lockGet" resultMap="BaseResultMap" parameterType="java.lang.String">
     SELECT
     <include refid="Base_Column_List"/>
-    from jump_around where around_id = #{value}
+    from jump_around where around_id = #{value} for update
   </select>
 
   <select id="getFinishedAround" resultMap="BaseResultMap">
@@ -32,6 +33,13 @@
     <include refid="Base_Column_List"/>
     from jump_around where status = 2
     order by create_time asc limit 30
+  </select>
+
+  <select id="getUnFinishedAround" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from jump_around where around_id =
+    (select around_id from jump_participant where user_id = #{value} order by participant_time desc limit 1) and status = 1
   </select>
 
 

@@ -1,5 +1,7 @@
 package com.crawler.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.crawler.dao.mapper.biz.JumpAroundBizMapper;
 import com.crawler.dao.mapper.db.JumpAroundMapper;
 import com.crawler.dao.mapper.db.JumpParticipantMapper;
@@ -9,13 +11,21 @@ import com.crawler.dao.model.db.JumpParticipantExample;
 import com.crawler.exception.BizException;
 import com.crawler.model.WebUserDTO;
 import com.crawler.model.WebUserHolder;
+import com.crawler.util.HttpClientUtil;
+import com.crawler.util.SignUtils;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -37,6 +47,12 @@ public class ParticipantService {
 	@Autowired
 	private JumpAroundMapper aroundMapper;
 
+	@Value("${api.user.balance.deduct}")
+	private String API_USER_BALANCE_DEDUCT;
+
+	@Value("${itobox.secret}")
+	private String ITOBOX_SECRET;
+
 	/**
 	 * 判断是否在此回合中
 	 * @param aroundId
@@ -53,37 +69,19 @@ public class ParticipantService {
 	}
 
 	/**
-	 * 判断是否有未完成回合
-	 * @param userId
-	 * @return
-	 */
-	public boolean hasUnFinishedAround(String userId) {
-		JumpParticipantExample example = new JumpParticipantExample();
-		JumpParticipantExample.Criteria criteria = example.createCriteria();
-		criteria.andUserIdEqualTo(userId);
-		criteria.andIsOverEqualTo(false);
-		List<JumpParticipant> jumpParticipants = participantMapper.selectByExample(example);
-		return !CollectionUtils.isEmpty(jumpParticipants);
-	}
-
-	/**
 	 * 获取未完成回合
+	 * @param aroundId
 	 * @param userId
 	 * @return
 	 */
-	public String getUnOverAroundId(String userId) {
+	public JumpParticipant getParticipant(String aroundId, String userId) {
 		JumpParticipantExample example = new JumpParticipantExample();
 		JumpParticipantExample.Criteria criteria = example.createCriteria();
+		criteria.andAroundIdEqualTo(aroundId);
 		criteria.andUserIdEqualTo(userId);
-		criteria.andIsOverEqualTo(false);
 		List<JumpParticipant> jumpParticipants = participantMapper.selectByExample(example);
-		if (!CollectionUtils.isEmpty(jumpParticipants)) {
-			return jumpParticipants.get(0).getAroundId();
-		} else {
-			return null;
-		}
+		return CollectionUtils.isEmpty(jumpParticipants) ? null : jumpParticipants.get(0);
 	}
-
 
 	/**
 	 * 客户完成游戏 加积分
@@ -103,8 +101,8 @@ public class ParticipantService {
 		if (!CollectionUtils.isEmpty(jumpParticipants)) {
 			participant = jumpParticipants.get(0);
 
-			LOG.info("上报用户得分, userId:{}, userName:{}, aroundId:{}",
-					user.getUserId(), user.getUserName(), participant.getAroundId());
+			LOG.info("上报用户得分, userId:{}, userName:{}, aroundId:{}, score:{}",
+					user.getUserId(), user.getUserName(), participant.getAroundId(), score);
 
 			//游戏已经结束
 			if (participant.getIsOver()) {
@@ -151,15 +149,13 @@ public class ParticipantService {
 				around.setUpdateTime(new Date());
 				aroundMapper.updateByPrimaryKeySelective(around);
 
-				
-				//FDY 2018/8/13 下午1:49 回合结束操作
 				//排序 做排名
 				Collections.sort(aroundParticipants, new PointCompator());
 				for (int i = 0; i < aroundParticipants.size(); i++) {
 					JumpParticipant participant1 = aroundParticipants.get(i);
 					participant1.setRankNum(i + 1);
 				}
-				if (aroundParticipants.size() <= 20) {
+				if (aroundParticipants.size() <= 10) {
 					JumpParticipant participant1 = aroundParticipants.get(0);
 					participant1.setIsWin(true);
 				} else {
@@ -218,10 +214,12 @@ public class ParticipantService {
 
 		boolean inAround = isInAround(aroundId, user.getUserId());
 		if (inAround) {
-			throw BizException.USER_IS_IN_AROUND;
+			return true;
+//			throw BizException.USER_IS_IN_AROUND;
 		}
 
-		if (hasUnFinishedAround(user.getUserId())) {
+		JumpAround unFinishedAround = aroundBizMapper.getUnFinishedAround(user.getUserId());
+		if (unFinishedAround != null) {
 			throw BizException.HAS_UNFINISHED_AROUND;
 		}
 
@@ -243,7 +241,27 @@ public class ParticipantService {
 		participant.setUpdateTime(null);
 		participantMapper.insertSelective(participant);
 
-		//FDY 2018/8/13 上午11:13 扣减余额
+		Map<String, Object> params = Maps.newHashMap();
+		params.put("userId", user.getUserId());
+		params.put("aid", around.getAroundId());
+		params.put("amount", around.getMoney().toString());
+		params.put("timestamp", String.valueOf(System.currentTimeMillis()));
+		params.put("sign", SignUtils.sign(params, ITOBOX_SECRET));
+		try {
+			String result = HttpClientUtil.httpGetRequest(API_USER_BALANCE_DEDUCT, params, 10000, 10000);
+			LOG.info("参与回合扣减用户余额, params:{}, result:{}", JSON.toJSONString(params), result);
+
+			JSONObject resultObject = JSON.parseObject(result);
+			if (resultObject.getIntValue("RET") == 1) {
+				LOG.info("参与回合扣减用户余额成功, params:{}", JSON.toJSONString(params));
+			} else {
+				LOG.error("参与回合调用itobox扣减余额接口失败, params:{}", JSON.toJSONString(params));
+				throw BizException.DEDUCT_BALANCE_FAIL;
+			}
+		} catch (URISyntaxException e) {
+			LOG.error("参与回合调用itobox扣减余额接口异常, params:{}", JSON.toJSONString(params), e);
+			throw BizException.DEDUCT_BALANCE_FAIL;
+		}
 
 		//修改
 		around.setCurrentParticipantsNum(around.getCurrentParticipantsNum() + 1);
@@ -265,16 +283,83 @@ public class ParticipantService {
 		return jumpParticipants;
 	}
 
+	/**
+	 * 记录游戏开始时间
+	 * @return
+	 */
+	public boolean gameStart() {
+		WebUserDTO user = WebUserHolder.getUser();
+
+		JumpParticipant participant;
+		JumpParticipantExample example = new JumpParticipantExample();
+		JumpParticipantExample.Criteria criteria = example.createCriteria();
+		criteria.andUserIdEqualTo(user.getUserId());
+		criteria.andIsOverEqualTo(false);
+		List<JumpParticipant> jumpParticipants = participantMapper.selectByExample(example);
+		if (!CollectionUtils.isEmpty(jumpParticipants)) {
+			participant = jumpParticipants.get(0);
+
+			LOG.info("游戏开始, userId:{}, userName:{}, aroundId:{}",
+					user.getUserId(), user.getUserName(), participant.getAroundId());
+
+			//游戏已经结束
+			if (participant.getIsOver()) {
+				LOG.info("此用户此回合游戏已经结束, userId:{}, aroundId:{}, participantId:{}",
+						user.getUserId(), participant.getAroundId(), participant.getParticipantId());
+				throw BizException.AROUND_IS_OVER;
+			}
+			participant.setStartTime(new Date());
+			participantMapper.updateByPrimaryKeySelective(participant);
+		} else {
+			LOG.info("此用户不存在未结束回合游戏, userId:{}",
+					user.getUserId());
+			throw BizException.USER_AROUND_NOT_EXISTS;
+		}
+
+		return true;
+	}
+
 	class PointCompator implements Comparator<JumpParticipant> {
 
 		@Override
 		public int compare(JumpParticipant o1, JumpParticipant o2) {
-			return o2.getPoint() - o1.getPoint();
+			if ((o2.getPoint() - o1.getPoint()) != 0) {
+				return o2.getPoint() - o1.getPoint();
+			} else {
+				int time1 = Long.valueOf(o1.getUpdateTime().getTime()).intValue() - Long.valueOf(o1.getStartTime().getTime()).intValue();
+				int time2 = Long.valueOf(o2.getUpdateTime().getTime()).intValue() - Long.valueOf(o2.getStartTime().getTime()).intValue();
+				return time1 - time2;
+			}
 		}
 	}
 
-	public static void main(String[] args) {
-		double x = 3.8;
-		System.out.println((int)x);
+	public static void main(String[] args) throws ParseException {
+//		double x = 3.8;
+//		System.out.println((int)x);
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		List<JumpParticipant> participants = Lists.newArrayList();
+		JumpParticipant p1 = new JumpParticipant();
+		p1.setPoint(1);
+		p1.setParticipantTime(sdf.parse("2018-08-22 12:30:30"));
+		p1.setUpdateTime(sdf.parse("2018-08-22 13:30:35"));
+		p1.setParticipantName("p1");
+		JumpParticipant p2 = new JumpParticipant();
+		p2.setPoint(1);
+		p2.setParticipantTime(sdf.parse("2018-08-22 12:30:30"));
+		p2.setUpdateTime(sdf.parse("2018-08-22 13:30:31"));
+		p2.setParticipantName("p2");
+		JumpParticipant p3 = new JumpParticipant();
+		p3.setPoint(1);
+		p3.setParticipantTime(sdf.parse("2018-08-22 12:30:30"));
+		p3.setUpdateTime(sdf.parse("2018-08-22 13:30:32"));
+		p3.setParticipantName("p3");
+		participants.add(p1);
+		participants.add(p2);
+		participants.add(p3);
+//		Collections.sort(participants, new PointCompator());
+
+		System.out.println(JSON.toJSONString(participants));
 	}
 }

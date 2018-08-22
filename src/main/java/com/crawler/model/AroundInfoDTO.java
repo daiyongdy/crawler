@@ -18,6 +18,7 @@ public class AroundInfoDTO {
 	private String desc;
 	private Boolean isOver;
 	private List<Participant> participants;
+	private Boolean isFinishGame;
 
 	public Boolean getIsOver() {
 		return isOver;
@@ -83,6 +84,14 @@ public class AroundInfoDTO {
 		this.participants = participants;
 	}
 
+	public Boolean getIsFinishGame() {
+		return isFinishGame;
+	}
+
+	public void setIsFinishGame(Boolean finishGame) {
+		isFinishGame = finishGame;
+	}
+
 	public static class Participant {
 		private String name;
 		private Date endTime;
@@ -129,6 +138,8 @@ public class AroundInfoDTO {
 		public void setIsWin(Boolean win) {
 			isWin = win;
 		}
+
+
 	}
 
 }

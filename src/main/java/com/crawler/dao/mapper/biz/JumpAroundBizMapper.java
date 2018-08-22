@@ -12,6 +12,11 @@ public interface JumpAroundBizMapper {
 
 	JumpAround lockGet(String aroundId);
 
+
 	List<JumpAround> getFinishedAround();
+
+
+	JumpAround getUnFinishedAround(String userId);
+
 
 }

@@ -75,4 +75,5 @@ public class CheckDTO {
 	public void setIsBalanceEnough(Boolean balanceEnough) {
 		isBalanceEnough = balanceEnough;
 	}
+
 }

@@ -30,6 +30,16 @@ public class ParticipantController {
 	}
 
 	/**
+	 * 游戏开始时间
+	 * @return
+	 */
+	@RequestMapping("/start")
+	public WebMessage start() {
+		participantService.gameStart();
+		return WebMessage.DEFAULT;
+	}
+
+	/**
 	 * 参与游戏
 	 * @param aid
 	 * @return

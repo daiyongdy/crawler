@@ -1,5 +1,6 @@
 package com.crawler.controller;
 
+import com.crawler.dao.model.db.JumpAround;
 import com.crawler.model.AroundInfoDTO;
 import com.crawler.model.CheckDTO;
 import com.crawler.model.WebMessage;
@@ -27,9 +28,9 @@ public class AroundController {
 						   @RequestParam int mp,
 						   @RequestParam String mm) {
 
-		aroundService.saveAround(name, mp, mm);
+		JumpAround around = aroundService.saveAround(name, mp, mm);
 
-		return WebMessage.DEFAULT;
+		return WebMessage.build(around);
 	}
 
 	@RequestMapping("/check")
