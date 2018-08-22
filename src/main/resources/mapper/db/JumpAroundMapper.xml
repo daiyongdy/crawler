@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crawler.dao.mapper.db.JumpAroundMapper" >
+  <resultMap id="BaseResultMap" type="com.crawler.dao.model.db.JumpAround" >
+    <id column="around_id" property="aroundId" jdbcType="VARCHAR" />
+    <result column="around_name" property="aroundName" jdbcType="VARCHAR" />
+    <result column="min_participants_num" property="minParticipantsNum" jdbcType="INTEGER" />
+    <result column="current_participants_num" property="currentParticipantsNum" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="total_amout" property="totalAmout" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="no" property="no" jdbcType="BIGINT" />
+    <result column="creater_id" property="createrId" jdbcType="VARCHAR" />
+    <result column="creater_name" property="createrName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    around_id, around_name, min_participants_num, current_participants_num, money, total_amout, 
+    status, no, creater_id, creater_name, create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.crawler.dao.model.db.JumpAroundExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from jump_around
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from jump_around
+    where around_id = #{aroundId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from jump_around
+    where around_id = #{aroundId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.crawler.dao.model.db.JumpAroundExample" >
+    delete from jump_around
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.crawler.dao.model.db.JumpAround" >
+    insert into jump_around (around_id, around_name, min_participants_num, 
+      current_participants_num, money, total_amout, 
+      status, no, creater_id, 
+      creater_name, create_time, update_time
+      )
+    values (#{aroundId,jdbcType=VARCHAR}, #{aroundName,jdbcType=VARCHAR}, #{minParticipantsNum,jdbcType=INTEGER}, 
+      #{currentParticipantsNum,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL}, #{totalAmout,jdbcType=DECIMAL}, 
+      #{status,jdbcType=INTEGER}, #{no,jdbcType=BIGINT}, #{createrId,jdbcType=VARCHAR}, 
+      #{createrName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.crawler.dao.model.db.JumpAround" >
+    insert into jump_around
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="aroundId != null" >
+        around_id,
+      </if>
+      <if test="aroundName != null" >
+        around_name,
+      </if>
+      <if test="minParticipantsNum != null" >
+        min_participants_num,
+      </if>
+      <if test="currentParticipantsNum != null" >
+        current_participants_num,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
+      <if test="totalAmout != null" >
+        total_amout,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="no != null" >
+        no,
+      </if>
+      <if test="createrId != null" >
+        creater_id,
+      </if>
+      <if test="createrName != null" >
+        creater_name,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="aroundId != null" >
+        #{aroundId,jdbcType=VARCHAR},
+      </if>
+      <if test="aroundName != null" >
+        #{aroundName,jdbcType=VARCHAR},
+      </if>
+      <if test="minParticipantsNum != null" >
+        #{minParticipantsNum,jdbcType=INTEGER},
+      </if>
+      <if test="currentParticipantsNum != null" >
+        #{currentParticipantsNum,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmout != null" >
+        #{totalAmout,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="no != null" >
+        #{no,jdbcType=BIGINT},
+      </if>
+      <if test="createrId != null" >
+        #{createrId,jdbcType=VARCHAR},
+      </if>
+      <if test="createrName != null" >
+        #{createrName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.crawler.dao.model.db.JumpAroundExample" resultType="java.lang.Integer" >
+    select count(*) from jump_around
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update jump_around
+    <set >
+      <if test="record.aroundId != null" >
+        around_id = #{record.aroundId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.aroundName != null" >
+        around_name = #{record.aroundName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.minParticipantsNum != null" >
+        min_participants_num = #{record.minParticipantsNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.currentParticipantsNum != null" >
+        current_participants_num = #{record.currentParticipantsNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.money != null" >
+        money = #{record.money,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalAmout != null" >
+        total_amout = #{record.totalAmout,jdbcType=DECIMAL},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.no != null" >
+        no = #{record.no,jdbcType=BIGINT},
+      </if>
+      <if test="record.createrId != null" >
+        creater_id = #{record.createrId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createrName != null" >
+        creater_name = #{record.createrName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update jump_around
+    set around_id = #{record.aroundId,jdbcType=VARCHAR},
+      around_name = #{record.aroundName,jdbcType=VARCHAR},
+      min_participants_num = #{record.minParticipantsNum,jdbcType=INTEGER},
+      current_participants_num = #{record.currentParticipantsNum,jdbcType=INTEGER},
+      money = #{record.money,jdbcType=DECIMAL},
+      total_amout = #{record.totalAmout,jdbcType=DECIMAL},
+      status = #{record.status,jdbcType=INTEGER},
+      no = #{record.no,jdbcType=BIGINT},
+      creater_id = #{record.createrId,jdbcType=VARCHAR},
+      creater_name = #{record.createrName,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crawler.dao.model.db.JumpAround" >
+    update jump_around
+    <set >
+      <if test="aroundName != null" >
+        around_name = #{aroundName,jdbcType=VARCHAR},
+      </if>
+      <if test="minParticipantsNum != null" >
+        min_participants_num = #{minParticipantsNum,jdbcType=INTEGER},
+      </if>
+      <if test="currentParticipantsNum != null" >
+        current_participants_num = #{currentParticipantsNum,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmout != null" >
+        total_amout = #{totalAmout,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="no != null" >
+        no = #{no,jdbcType=BIGINT},
+      </if>
+      <if test="createrId != null" >
+        creater_id = #{createrId,jdbcType=VARCHAR},
+      </if>
+      <if test="createrName != null" >
+        creater_name = #{createrName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where around_id = #{aroundId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crawler.dao.model.db.JumpAround" >
+    update jump_around
+    set around_name = #{aroundName,jdbcType=VARCHAR},
+      min_participants_num = #{minParticipantsNum,jdbcType=INTEGER},
+      current_participants_num = #{currentParticipantsNum,jdbcType=INTEGER},
+      money = #{money,jdbcType=DECIMAL},
+      total_amout = #{totalAmout,jdbcType=DECIMAL},
+      status = #{status,jdbcType=INTEGER},
+      no = #{no,jdbcType=BIGINT},
+      creater_id = #{createrId,jdbcType=VARCHAR},
+      creater_name = #{createrName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where around_id = #{aroundId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -269,7 +269,7 @@ public class ParticipantService {
 		around.setUpdateTime(new Date());
 		aroundMapper.updateByPrimaryKeySelective(around);
 
-		LOG.info("用户名称:{}, 用户id:{} 参加了 回合:{} 成功, 回合名称:{}", user.getUserName(), user.getUserId(), around.getMoney(), around.getAroundName());
+		LOG.info("用户名称:{}, 用户id:{} 参加了 回合:{} 成功, 回合名称:{}", user.getUserName(), user.getUserId(), around.getAroundId(), around.getAroundName());
 
 		return true;
 	}
