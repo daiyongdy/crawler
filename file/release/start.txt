@@ -1,0 +1,2 @@
+#启动api
+nohup java -jar jump-1.0.jar --spring.profiles.active=release --server.port=9090 >> jump.log &

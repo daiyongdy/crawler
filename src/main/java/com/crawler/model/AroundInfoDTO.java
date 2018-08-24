@@ -98,6 +98,7 @@ public class AroundInfoDTO {
 		private String point;
 		private String rank;
 		private Boolean isWin;
+		private long costTime;
 
 		public String getName() {
 			return name;
@@ -139,7 +140,13 @@ public class AroundInfoDTO {
 			isWin = win;
 		}
 
+		public long getCostTime() {
+			return costTime;
+		}
 
+		public void setCostTime(long costTime) {
+			this.costTime = costTime;
+		}
 	}
 
 }

@@ -3,6 +3,7 @@ package com.crawler.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.crawler.dao.mapper.biz.JumpAroundBizMapper;
+import com.crawler.dao.mapper.biz.JumpGameRecordBizMapper;
 import com.crawler.dao.mapper.db.*;
 import com.crawler.dao.model.db.*;
 import com.crawler.exception.BizException;
@@ -73,6 +74,9 @@ public class AroundService {
 	@Autowired
 	private JumpGameRecordMapper gameRecordMapper;
 
+	@Autowired
+	private JumpGameRecordBizMapper gameRecordBizMapper;
+
 
 	/**
 	 * 创建回合
@@ -115,6 +119,8 @@ public class AroundService {
 		around.setUpdateTime(null);
 
 		//回合序列
+		gameRecordBizMapper.inc1();
+
 		JumpIdGene jumpIdGene = new JumpIdGene();
 		idGeneMapper.insert(jumpIdGene);
 		around.setNo(jumpIdGene.getId());
@@ -289,6 +295,11 @@ public class AroundService {
 				p.setRank("回合未结束");
 			}
 			p.setIsWin(participant.getIsWin());
+			if (participant.getStartTime() != null && participant.getUpdateTime() != null) {
+				p.setCostTime(
+						Long.valueOf(participant.getUpdateTime().getTime() - participant.getStartTime().getTime()).intValue() / 1000
+				);
+			}
 			ps.add(p);
 		}
 		aroundInfoDTO.setParticipants(ps);
@@ -333,7 +344,7 @@ public class AroundService {
 			//用户游戏记录
 			for (JumpParticipant jumpParticipant : participants) {
 				JumpGameRecord gameRecord = new JumpGameRecord();
-				gameRecord.setUserId(String.valueOf(jumpParticipant.getParticipantId()));
+				gameRecord.setUserId(String.valueOf(jumpParticipant.getUserId()));
 				gameRecord.setGameNo(around.getNo());
 				gameRecord.setMoney(around.getMoney());
 				gameRecord.setRankNum(jumpParticipant.getRankNum());
@@ -354,7 +365,7 @@ public class AroundService {
 			for (JumpParticipant participant : participants) {
 
 				JumpGameRecord gameRecord = new JumpGameRecord();
-				gameRecord.setUserId(String.valueOf(participant.getParticipantId()));
+				gameRecord.setUserId(String.valueOf(participant.getUserId()));
 				gameRecord.setGameNo(around.getNo());
 				gameRecord.setMoney(around.getMoney());
 				gameRecord.setRankNum(participant.getRankNum());

@@ -12,4 +12,6 @@ public interface JumpGameRecordBizMapper {
 
 	List<JumpGameRecord> records(String userId);
 
+	void inc1();
+
 }

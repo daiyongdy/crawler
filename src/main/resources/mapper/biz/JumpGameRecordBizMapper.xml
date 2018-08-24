@@ -15,11 +15,15 @@
   <sql id="Base_Column_List" >
     id, user_id, game_no, money, rank_num, income, create_time
   </sql>
+  <update id="inc1">
+    alter table jump_game_record AUTO_INCREMENT=1
+  </update>
 
-  <select id="records" resultMap="BaseResultMap">
+  <select id="records" resultMap="BaseResultMap" parameterType="java.lang.String">
     SELECT
     <include refid="Base_Column_List"></include>
     from jump_game_record
+    where user_id = #{value}
     order by create_time desc limit 10
   </select>
 

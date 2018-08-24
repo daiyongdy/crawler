@@ -159,7 +159,8 @@ public class ParticipantService {
 					JumpParticipant participant1 = aroundParticipants.get(0);
 					participant1.setIsWin(true);
 				} else {
-					int winNum = (int) (aroundParticipants.size() * 0.1);
+					int winNum = (int) (aroundParticipants.size() * 0.2);
+
 					for (int i = 0; i < aroundParticipants.size(); i++) {
 						if ((i + 1) <= winNum) {
 							JumpParticipant participant1 = aroundParticipants.get(i);
@@ -249,17 +250,17 @@ public class ParticipantService {
 		params.put("sign", SignUtils.sign(params, ITOBOX_SECRET));
 		try {
 			String result = HttpClientUtil.httpGetRequest(API_USER_BALANCE_DEDUCT, params, 10000, 10000);
-			LOG.info("参与回合扣减用户余额, params:{}, result:{}", JSON.toJSONString(params), result);
+			LOG.info("参与回合扣减用户余额, userName:{} params:{}, result:{}", user.getUserName(), JSON.toJSONString(params), result);
 
 			JSONObject resultObject = JSON.parseObject(result);
 			if (resultObject.getIntValue("RET") == 1) {
-				LOG.info("参与回合扣减用户余额成功, params:{}", JSON.toJSONString(params));
+				LOG.info("参与回合扣减用户余额成功, userName:{}, params:{}", user.getUserName(), JSON.toJSONString(params));
 			} else {
-				LOG.error("参与回合调用itobox扣减余额接口失败, params:{}", JSON.toJSONString(params));
+				LOG.error("参与回合调用itobox扣减余额接口失败, userName:{}, params:{}", user.getUserName(), JSON.toJSONString(params));
 				throw BizException.DEDUCT_BALANCE_FAIL;
 			}
 		} catch (URISyntaxException e) {
-			LOG.error("参与回合调用itobox扣减余额接口异常, params:{}", JSON.toJSONString(params), e);
+			LOG.error("参与回合调用itobox扣减余额接口异常, userName:{}, params:{}", user.getUserName(), JSON.toJSONString(params), e);
 			throw BizException.DEDUCT_BALANCE_FAIL;
 		}
 
@@ -283,7 +284,7 @@ public class ParticipantService {
 		return jumpParticipants;
 	}
 
-	/**
+	/**c
 	 * 记录游戏开始时间
 	 * @return
 	 */
@@ -320,14 +321,13 @@ public class ParticipantService {
 	}
 
 	class PointCompator implements Comparator<JumpParticipant> {
-
 		@Override
 		public int compare(JumpParticipant o1, JumpParticipant o2) {
 			if ((o2.getPoint() - o1.getPoint()) != 0) {
 				return o2.getPoint() - o1.getPoint();
 			} else {
-				int time1 = Long.valueOf(o1.getUpdateTime().getTime()).intValue() - Long.valueOf(o1.getStartTime().getTime()).intValue();
-				int time2 = Long.valueOf(o2.getUpdateTime().getTime()).intValue() - Long.valueOf(o2.getStartTime().getTime()).intValue();
+				int time1 = Long.valueOf(o1.getUpdateTime().getTime() - (o1.getStartTime() != null ? o1.getStartTime().getTime() : o1.getParticipantTime().getTime())).intValue();
+				int time2 = Long.valueOf(o2.getUpdateTime().getTime() - (o2.getStartTime() != null ? o2.getStartTime().getTime() : o2.getParticipantTime().getTime())).intValue();
 				return time1 - time2;
 			}
 		}
