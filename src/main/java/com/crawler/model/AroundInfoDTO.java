@@ -11,6 +11,7 @@ import java.util.List;
 public class AroundInfoDTO {
 
 	private String createrName;
+	private String aroundName;
 	private int minParticipantsNum;
 	private BigDecimal money;
 	private int currentParticipantsNum;
@@ -90,6 +91,14 @@ public class AroundInfoDTO {
 
 	public void setIsFinishGame(Boolean finishGame) {
 		isFinishGame = finishGame;
+	}
+
+	public String getAroundName() {
+		return aroundName;
+	}
+
+	public void setAroundName(String aroundName) {
+		this.aroundName = aroundName;
 	}
 
 	public static class Participant {

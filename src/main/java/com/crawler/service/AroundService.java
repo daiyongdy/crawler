@@ -255,6 +255,7 @@ public class AroundService {
 
 		AroundInfoDTO aroundInfoDTO = new AroundInfoDTO();
 		aroundInfoDTO.setCreaterName(around.getCreaterName());
+		aroundInfoDTO.setAroundName(around.getAroundName());
 		aroundInfoDTO.setMinParticipantsNum(around.getMinParticipantsNum());
 		aroundInfoDTO.setMoney(around.getMoney());
 		aroundInfoDTO.setCurrentParticipantsNum(around.getCurrentParticipantsNum());

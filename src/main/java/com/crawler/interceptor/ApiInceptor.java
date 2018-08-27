@@ -81,9 +81,9 @@ public class ApiInceptor implements HandlerInterceptor {
 
 	public static void main(String[] args) throws Exception {
 		Map<String, Object> params = Maps.newHashMap();
-		params.put("email", "qq351273576@live.com");
-		params.put("sign", SignUtils.sign(params, "vKwaQPulTNpCkr9X"));
-		String result = HttpClientUtil.httpGetRequest("https://eth.itobox.io/api/v1/game/user", params, 10000, 10000);
+//		params.put("email", "qq351273576@live.com");
+//		params.put("sign", SignUtils.sign(params, "vKwaQPulTNpCkr9X"));
+		String result = HttpClientUtil.httpGetRequest("https://eth.itobox.io/api/v1/game/balance.exclusion", params, 10000, 10000);
 		System.out.println(result);
 
 		System.out.println(AesUtils.aesEncrypt("1", "cfNHrSHWrhVSTxjK"));
