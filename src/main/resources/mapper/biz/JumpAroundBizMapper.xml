@@ -42,5 +42,12 @@
     (select around_id from jump_participant where user_id = #{value} order by participant_time desc limit 1) and status = 1
   </select>
 
+  <select id="getUnFinishedAroundList" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from jump_around
+    where userId = #{value} and (status = 2 || status == 3)
+  </select>
+
 
 </mapper>

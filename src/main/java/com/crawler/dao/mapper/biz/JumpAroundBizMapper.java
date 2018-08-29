@@ -18,5 +18,7 @@ public interface JumpAroundBizMapper {
 
 	JumpAround getUnFinishedAround(String userId);
 
+	List<JumpAround> getUnFinishedAroundList(String userId);
+
 
 }

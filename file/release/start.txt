@@ -1,2 +1,6 @@
 #启动api
 nohup java -jar jump-1.0.jar --spring.profiles.active=release --server.port=9090 >> jump.log &
+
+scp -r -i /usr/local/japan-eth.pem index.html static centos@54.95.220.127:/home/centos
+
+scp -i /usr/local/japan-eth.pem jump-1.0.jar centos@54.95.220.127:/home/centos

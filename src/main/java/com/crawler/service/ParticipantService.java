@@ -85,10 +85,12 @@ public class ParticipantService {
 
 	/**
 	 * 客户完成游戏 加积分
+	 *
+	 * @param aroundId
 	 * @param score
 	 * @return
 	 */
-	public boolean score(int score) {
+	public boolean score(String aroundId, int score) {
 
 		WebUserDTO user = WebUserHolder.getUser();
 
@@ -96,8 +98,10 @@ public class ParticipantService {
 		JumpParticipantExample example = new JumpParticipantExample();
 		JumpParticipantExample.Criteria criteria = example.createCriteria();
 		criteria.andUserIdEqualTo(user.getUserId());
+		criteria.andAroundIdEqualTo(aroundId);
 		criteria.andIsOverEqualTo(false);
 		List<JumpParticipant> jumpParticipants = participantMapper.selectByExample(example);
+
 		if (!CollectionUtils.isEmpty(jumpParticipants)) {
 			participant = jumpParticipants.get(0);
 
@@ -185,7 +189,7 @@ public class ParticipantService {
 	 * @param aroundId
 	 * @return
 	 */
-	public List<JumpParticipant> getParticipants(String aroundId) {
+	public List<JumpParticipant> getParticipantsOrderByTime(String aroundId) {
 		JumpParticipantExample example = new JumpParticipantExample();
 		JumpParticipantExample.Criteria criteria = example.createCriteria();
 		criteria.andAroundIdEqualTo(aroundId);
@@ -216,13 +220,12 @@ public class ParticipantService {
 		boolean inAround = isInAround(aroundId, user.getUserId());
 		if (inAround) {
 			return true;
-//			throw BizException.USER_IS_IN_AROUND;
 		}
 
-		JumpAround unFinishedAround = aroundBizMapper.getUnFinishedAround(user.getUserId());
-		if (unFinishedAround != null) {
-			throw BizException.HAS_UNFINISHED_AROUND;
-		}
+//		JumpAround unFinishedAround = aroundBizMapper.getUnFinishedAround(user.getUserId());
+//		if (unFinishedAround != null) {
+//			throw BizException.HAS_UNFINISHED_AROUND;
+//		}
 
 		if (user.getBalance().compareTo(around.getMoney()) < 0) {
 			throw BizException.BALANCE_NOT_ENOUGH;
@@ -287,16 +290,19 @@ public class ParticipantService {
 	/**c
 	 * 记录游戏开始时间
 	 * @return
+	 * @param aroundId
 	 */
-	public boolean gameStart() {
+	public boolean gameStart(String aroundId) {
 		WebUserDTO user = WebUserHolder.getUser();
 
 		JumpParticipant participant;
 		JumpParticipantExample example = new JumpParticipantExample();
 		JumpParticipantExample.Criteria criteria = example.createCriteria();
 		criteria.andUserIdEqualTo(user.getUserId());
+		criteria.andAroundIdEqualTo(aroundId);
 		criteria.andIsOverEqualTo(false);
 		List<JumpParticipant> jumpParticipants = participantMapper.selectByExample(example);
+
 		if (!CollectionUtils.isEmpty(jumpParticipants)) {
 			participant = jumpParticipants.get(0);
 

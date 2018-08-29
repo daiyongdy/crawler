@@ -99,10 +99,10 @@ public class AroundService {
 			throw BizException.BALANCE_NOT_ENOUGH;
 		}
 
-		JumpAround unFinishedAround = aroundBizMapper.getUnFinishedAround(user.getUserId());
+		/*JumpAround unFinishedAround = aroundBizMapper.getUnFinishedAround(user.getUserId());
 		if (unFinishedAround != null) {
 			throw BizException.HAS_UNFINISHED_AROUND;
-		}
+		}*/
 
 		//创建回合
 		JumpAround around = new JumpAround();
@@ -141,6 +141,7 @@ public class AroundService {
 		participant.setUpdateTime(null);
 		participantMapper.insertSelective(participant);
 
+		//扣减用户余额
 		Map<String, Object> params = Maps.newHashMap();
 		params.put("userId", user.getUserId());
 		params.put("aid", around.getAroundId());
@@ -155,11 +156,11 @@ public class AroundService {
 			if (resultObject.getIntValue("RET") == 1) {
 				LOG.info("创建回合扣减用户余额成功, params:{}", JSON.toJSONString(params));
 			} else {
-				LOG.error("创建回合调用itobox扣减余额接口失败, params:{}", JSON.toJSONString(params));
+				LOG.error("创建回合扣减用户余额失败, params:{}", JSON.toJSONString(params));
 				throw BizException.DEDUCT_BALANCE_FAIL;
 			}
 		} catch (URISyntaxException e) {
-			LOG.error("创建回合调用itobox扣减余额接口异常, params:{}", JSON.toJSONString(params), e);
+			LOG.error("创建回合扣减用户余额异常, params:{}", JSON.toJSONString(params), e);
 			throw BizException.DEDUCT_BALANCE_FAIL;
 		}
 		LOG.info("创建回合成功, userId:{}, userName:{}, around:{}", user.getUserId(), user.getUserName(), JSON.toJSONString(around));
@@ -168,16 +169,8 @@ public class AroundService {
 
 	}
 
-	private boolean isNameExists(String name) {
-		JumpAroundExample example = new JumpAroundExample();
-		JumpAroundExample.Criteria criteria = example.createCriteria();
-		criteria.andAroundNameEqualTo(name);
-		List<JumpAround> jumpArounds = aroundMapper.selectByExample(example);
-		return !CollectionUtils.isEmpty(jumpArounds);
-	}
-
 	/**
-	 * 检查各种信息
+	 * 检查用户与回合信息
 	 * @param request
 	 * @param aroundId
 	 * @return
@@ -212,15 +205,12 @@ public class AroundService {
 		}
 		//点击入口
 		else {
-			JumpAround unFinishedAround = aroundBizMapper.getUnFinishedAround(user.getUserId());
-			if (unFinishedAround != null) {
+			//获取最后一个未完成回合
+			List<JumpAround> unFinishedAroundList = aroundBizMapper.getUnFinishedAroundList(user.getUserId());
+			if (!CollectionUtils.isEmpty(unFinishedAroundList)) {
+				JumpAround unFinishedAround = unFinishedAroundList.get(unFinishedAroundList.size() - 1);
 				checkDTO.setAroundId(aroundId);
-				int status = unFinishedAround.getStatus();
-				if (status == 2 || status == 3) {
-					checkDTO.setIsAroundOver(true);
-				} else {
-					checkDTO.setIsAroundOver(false);
-				}
+				checkDTO.setIsAroundOver(false);
 				checkDTO.setAroundId(unFinishedAround.getAroundId());
 				checkDTO.setIsSelfCreate(unFinishedAround.getCreaterId().equals(user.getUserId()));
 				checkDTO.setHasBalance(user.getBalance().compareTo(BigDecimal.ZERO) > 0);
@@ -261,7 +251,6 @@ public class AroundService {
 		aroundInfoDTO.setCurrentParticipantsNum(around.getCurrentParticipantsNum());
 		aroundInfoDTO.setTotalAmout(around.getTotalAmout());
 		int status = around.getStatus();
-//		boolean inAround = participantService.isInAround(aroundId, user.getUserId());
 		JumpParticipant participant1 = participantService.getParticipant(aroundId, user.getUserId());
 		if (status == 2 || status == 3 ) {
 			aroundInfoDTO.setIsOver(true);
@@ -270,7 +259,6 @@ public class AroundService {
 			aroundInfoDTO.setIsOver(false);
 			boolean joinAround = participant1 != null;
 			boolean finishGame = participant1 != null ? participant1.getIsOver() ? true : false : false;
-//			aroundInfoDTO.setDesc(participant1 != null ? "已参与" : "立即参与");
 			aroundInfoDTO.setDesc((joinAround && finishGame) ? "已参与" : "开始游戏");
 		}
 
@@ -281,7 +269,7 @@ public class AroundService {
 		if (status == 2 || status == 3 ) {
 			participants = participantService.getParticipantsOrderByRank(aroundId);
 		} else {
-			participants = participantService.getParticipants(aroundId);
+			participants = participantService.getParticipantsOrderByTime(aroundId);
 		}
 		List<AroundInfoDTO.Participant> ps = Lists.newArrayList();
 		for (JumpParticipant participant : participants) {
@@ -291,16 +279,17 @@ public class AroundService {
 			if (status == 2 || status == 3 ) {
 				p.setPoint(String.valueOf(participant.getPoint()));
 				p.setRank(String.valueOf(participant.getRankNum()));
+				if (participant.getStartTime() != null && participant.getUpdateTime() != null) {
+					p.setCostTime(
+						String.valueOf(Long.valueOf(participant.getUpdateTime().getTime() - participant.getStartTime().getTime()).intValue() / 1000)
+					);
+				}
 			} else {
 				p.setPoint("***");
 				p.setRank("回合未结束");
+				p.setCostTime("***");
 			}
 			p.setIsWin(participant.getIsWin());
-			if (participant.getStartTime() != null && participant.getUpdateTime() != null) {
-				p.setCostTime(
-						Long.valueOf(participant.getUpdateTime().getTime() - participant.getStartTime().getTime()).intValue() / 1000
-				);
-			}
 			ps.add(p);
 		}
 		aroundInfoDTO.setParticipants(ps);
