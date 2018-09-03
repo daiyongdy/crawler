@@ -217,15 +217,15 @@ public class ParticipantService {
 
 		WebUserDTO user = WebUserHolder.getUser();
 
-		boolean inAround = isInAround(aroundId, user.getUserId());
-		if (inAround) {
-			return true;
+//		boolean inAround = isInAround(aroundId, user.getUserId());
+		JumpParticipant participant2 = getParticipant(aroundId, user.getUserId());
+		if (participant2 != null) {
+			if (participant2.getIsOver() == true) {
+				throw BizException.AROUND_IS_OVER;
+			} else {
+				return true;
+			}
 		}
-
-//		JumpAround unFinishedAround = aroundBizMapper.getUnFinishedAround(user.getUserId());
-//		if (unFinishedAround != null) {
-//			throw BizException.HAS_UNFINISHED_AROUND;
-//		}
 
 		if (user.getBalance().compareTo(around.getMoney()) < 0) {
 			throw BizException.BALANCE_NOT_ENOUGH;

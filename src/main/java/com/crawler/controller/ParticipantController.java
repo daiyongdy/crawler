@@ -24,8 +24,8 @@ public class ParticipantController {
 	 * @return
 	 */
 	@RequestMapping("/report")
-	public WebMessage score(@RequestParam String aroundId, @RequestParam int pts) {
-		boolean scoreResult = participantService.score(aroundId, pts);
+	public WebMessage score(@RequestParam String aid, @RequestParam int pts) {
+		boolean scoreResult = participantService.score(aid, pts);
 		return WebMessage.build(scoreResult);
 	}
 
@@ -34,8 +34,8 @@ public class ParticipantController {
 	 * @return
 	 */
 	@RequestMapping("/start")
-	public WebMessage start(@RequestParam String aroundId) {
-		participantService.gameStart(aroundId);
+	public WebMessage start(@RequestParam String aid) {
+		participantService.gameStart(aid);
 		return WebMessage.DEFAULT;
 	}
 

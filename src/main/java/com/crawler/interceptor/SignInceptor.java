@@ -64,9 +64,8 @@ public class SignInceptor implements HandlerInterceptor {
 
 	public static void main(String[] args) {
 		Map<String, String> params = Maps.newHashMap();
-		params.put("b", "v1");
-		params.put("c", "v2");
-		params.put("a", "");
+		params.put("aid", "D748DA5D27FD4C25A11B3CA19EDB8543");
+		params.put("pts", "pts");
 		SortedMap<String, String> sortedParams = new TreeMap<String, String>(params);
 		sortedParams.remove("sign");
 		StringBuilder sb = new StringBuilder();
@@ -74,6 +73,6 @@ public class SignInceptor implements HandlerInterceptor {
 			String val = sortedParams.get(key);
 			sb.append(key).append("=").append(StringUtils.defaultIfEmpty(val, "")).append("|");
 		}
-		System.out.println(MD5Utils.getDigest(sb.append("vKwaQPulTNpCkr9X").toString()));
+		System.out.println(MD5Utils.getDigest(sb.append("cfNHrSHWrhVSTxjK").toString()));
 	}
 }

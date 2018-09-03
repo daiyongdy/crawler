@@ -46,7 +46,7 @@
     select
     <include refid="Base_Column_List"/>
     from jump_around
-    where userId = #{value} and (status = 2 || status == 3)
+    where creater_id = #{value} and (status = 2 || status = 3)
   </select>
 
 
