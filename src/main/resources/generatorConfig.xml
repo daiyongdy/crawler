@@ -18,14 +18,14 @@
 
         <javaClientGenerator targetPackage="com.crawler.dao.mapper.db" targetProject="/Users/daiyong/work/personal/project/crawer/src/main/java" type="XMLMAPPER"/>
 
-        <!--<table tableName="jump_around" domainObjectName="JumpAround">-->
-            <!--&lt;!&ndash;<generatedKey column="around_id" sqlStatement="SELECT LAST_INSERT_ID()"/>&ndash;&gt;-->
-        <!--</table>-->
-        <!--<table tableName="jump_participant" domainObjectName="JumpParticipant"></table>-->
+        <table tableName="jump_around" domainObjectName="JumpAround">
+            <generatedKey column="around_id" sqlStatement="SELECT LAST_INSERT_ID()"/>
+        </table>
+        <table tableName="jump_participant" domainObjectName="JumpParticipant"></table>
         <!--<table tableName="jump_settle" domainObjectName="JumpSettle">-->
             <!--<generatedKey column="settle_id" sqlStatement="SELECT LAST_INSERT_ID()"/>-->
         <!--</table>-->
-        <!--<table tableName="jump_settle_detail" domainObjectName="JumpSettleDetail"></table>-->
+        <table tableName="jump_settle_detail" domainObjectName="JumpSettleDetail"></table>
         <!--<table tableName="jump_id_gene" domainObjectName="JumpIdGene">-->
             <!--<generatedKey column="id" sqlStatement="SELECT LAST_INSERT_ID()"/>-->
         <!--</table>-->

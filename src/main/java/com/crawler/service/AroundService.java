@@ -117,6 +117,7 @@ public class AroundService {
 		around.setCreaterName(user.getUserName());
 		around.setCreateTime(new Date());
 		around.setUpdateTime(null);
+		around.setCoinType(user.getCoinType());
 
 		//回合序列
 		gameRecordBizMapper.inc1();
@@ -132,6 +133,7 @@ public class AroundService {
 		participant.setUserId(user.getUserId());
 		participant.setParticipantName(user.getUserName());
 		participant.setAroundId(around.getAroundId());
+		participant.setCoinType(user.getCoinType());
 		participant.setMoney(around.getMoney());
 		participant.setPoint(-1);
 		participant.setRankNum(0);
@@ -147,6 +149,7 @@ public class AroundService {
 		params.put("aid", around.getAroundId());
 		params.put("amount", around.getMoney().toString());
 		params.put("timestamp", String.valueOf(System.currentTimeMillis()));
+		params.put("coinType", user.getCoinType());
 		params.put("sign", SignUtils.sign(params, ITOBOX_SECRET));
 		try {
 			String result = HttpClientUtil.httpGetRequest(API_USER_BALANCE_DEDUCT, params, 10000, 10000);
@@ -325,6 +328,7 @@ public class AroundService {
 			settleDetail.setAroundId(around.getAroundId());
 			BigDecimal prize = around.getTotalAmout().multiply(new BigDecimal(0.9));
 			BigDecimal prizeFinal = prize.setScale(4, BigDecimal.ROUND_DOWN);
+			settleDetail.setCoinType(around.getCoinType());
 			settleDetail.setPrize(prizeFinal);
 			settleDetail.setType(1);
 			settleDetail.setHasSettleFinished(false);
@@ -336,6 +340,7 @@ public class AroundService {
 				JumpGameRecord gameRecord = new JumpGameRecord();
 				gameRecord.setUserId(String.valueOf(jumpParticipant.getUserId()));
 				gameRecord.setGameNo(around.getNo());
+				gameRecord.setCoinType(around.getCoinType());
 				gameRecord.setMoney(around.getMoney());
 				gameRecord.setRankNum(jumpParticipant.getRankNum());
 				gameRecord.setIncome(jumpParticipant.getRankNum() == 1 ? prizeFinal : BigDecimal.ZERO);
@@ -357,6 +362,7 @@ public class AroundService {
 				JumpGameRecord gameRecord = new JumpGameRecord();
 				gameRecord.setUserId(String.valueOf(participant.getUserId()));
 				gameRecord.setGameNo(around.getNo());
+				gameRecord.setCoinType(around.getCoinType());
 				gameRecord.setMoney(around.getMoney());
 				gameRecord.setRankNum(participant.getRankNum());
 				gameRecord.setCostTime((participant.getUpdateTime().getTime() - participant.getStartTime().getTime()) / 1000);
@@ -368,6 +374,7 @@ public class AroundService {
 					settleDetail.setUserId(participant.getUserId());
 					settleDetail.setParticipantName(participant.getParticipantName());
 					settleDetail.setAroundId(around.getAroundId());
+					settleDetail.setCoinType(around.getCoinType());
 					//冠军
 					if (participant.getRankNum() == 1) {
 						BigDecimal prize = plus.multiply(new BigDecimal("0.5"));
@@ -397,6 +404,7 @@ public class AroundService {
 		settleDetail.setUserId(around.getCreaterId());
 		settleDetail.setParticipantName(around.getCreaterName());
 		settleDetail.setAroundId(around.getAroundId());
+		settleDetail.setCoinType(around.getCoinType());
 		BigDecimal prize = around.getTotalAmout().multiply(new BigDecimal("0.08"));
 		BigDecimal prizeFinal = prize.setScale(4,BigDecimal.ROUND_DOWN);
 		settleDetail.setPrize(prizeFinal);

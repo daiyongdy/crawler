@@ -236,6 +236,7 @@ public class ParticipantService {
 		participant.setUserId(user.getUserId());
 		participant.setParticipantName(user.getUserName());
 		participant.setAroundId(around.getAroundId());
+		participant.setCoinType(around.getCoinType());
 		participant.setMoney(around.getMoney());
 		participant.setPoint(-1);
 		participant.setRankNum(0);
@@ -250,6 +251,7 @@ public class ParticipantService {
 		params.put("aid", around.getAroundId());
 		params.put("amount", around.getMoney().toString());
 		params.put("timestamp", String.valueOf(System.currentTimeMillis()));
+		params.put("coinType", around.getCoinType());
 		params.put("sign", SignUtils.sign(params, ITOBOX_SECRET));
 		try {
 			String result = HttpClientUtil.httpGetRequest(API_USER_BALANCE_DEDUCT, params, 10000, 10000);

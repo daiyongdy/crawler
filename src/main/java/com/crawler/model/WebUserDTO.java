@@ -10,6 +10,7 @@ public class WebUserDTO {
 	private String userId;
 	private String userName;
 	private BigDecimal balance;
+	private String coinType;
 
 	public String getUserId() {
 		return userId;
@@ -33,5 +34,13 @@ public class WebUserDTO {
 
 	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
+	}
+
+	public String getCoinType() {
+		return coinType;
+	}
+
+	public void setCoinType(String coinType) {
+		this.coinType = coinType;
 	}
 }

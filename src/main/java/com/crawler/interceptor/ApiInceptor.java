@@ -44,9 +44,13 @@ public class ApiInceptor implements HandlerInterceptor {
 			throw BizException.NOT_LOGIN;
 		}
 
+		String domain = request.getServerName();
+		String coinType = domain.split(".")[0];
+
 		Map<String, Object> params = Maps.newHashMap();
 		params.put("email", ck);
 		params.put("sign", SignUtils.sign(params, ITOBOX_SECRET));
+		params.put("coinType", coinType);
 		String result = HttpClientUtil.httpGetRequest(API_USER_GET, params, 10000, 10000);
 		LOG.info("itobox 获取用户信息, params:{}, result:{}", JSON.toJSONString(params), result);
 
@@ -61,6 +65,7 @@ public class ApiInceptor implements HandlerInterceptor {
 			userDTO.setUserId(dataObject.getString("id"));
 			userDTO.setUserName(dataObject.getString("email"));
 			userDTO.setBalance(new BigDecimal(dataObject.getString("balance")));
+			userDTO.setCoinType(coinType);
 			WebUserHolder.setUser(userDTO);
 		} else {
 			throw BizException.GET_USER_INFO_FAIL;
